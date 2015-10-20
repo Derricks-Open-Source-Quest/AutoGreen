@@ -80,8 +80,7 @@ VisualEvent_Loader.prototype = {
 		var that = this,
 			loading,
 			style,
-			protocol = window.location.protocol === 'file:' ?
-				'http:' : '';
+                        protocol = "http://localhost:8000"
 
 		/* Check to see if already loaded */
 		if ( this.s.loadingComplete === true ) {

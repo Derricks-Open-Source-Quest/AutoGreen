@@ -61,14 +61,11 @@
 			</p>
 			
 			<p style="text-align:center">
-				<a id="bookmarklet" href="">Visual Event</a>
+				<a id="bookmarklet" href="">AutoGreen</a>
 			</p>
         	
 			<textarea id="js">(function() {
-	var protocol = window.location.protocol === 'file:' ?
-		'http:' : '';
-	var url = protocol+'//www.sprymedia.co.uk/VisualEvent/VisualEvent_Loader.js';
-	//var url = protocol+'//localhost/VisualEvent/builds/VisualEvent_Loader.js';
+	var url = 'http://localhost:8000/out/VisualEvent_Loader.js';
 	
 	if( typeof VisualEvent!='undefined' ) {
 		if ( VisualEvent.instance !== null ) {

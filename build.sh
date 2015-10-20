@@ -24,25 +24,19 @@ elif [ "$1" = "clean" ]; then
 fi
 
 # OPTIONS
-SCRIPT_LOC=$1
-DEBUG=$2
-
-if [ "$SCRIPT_LOC" = "debug" ]; then
-	DEBUG="debug"
-	SCRIPT_LOC="localhost/VisualEvent/builds"
-fi
-
-if [ -z "$1" ]; then
-	SCRIPT_LOC="localhost/VisualEvent/builds"
-fi
+DEBUG=$1
 
 # DEFAULTS
 UGLIFYJS=/Users/allan/node_modules/uglify-js/bin/uglifyjs
 JSDOC3=/usr/local/jsdoc/jsdoc
 
-BUILD_DIR=VisualEvent-$(date +%s)
-BUILD_BASE=$(pwd)/builds
-BUILD=$(pwd)/builds/${BUILD_DIR}
+BUILD_BASE=$(pwd)/out
+if [ "$DEBUG" = "debug" ]; then
+  BUILD_DIR=debug
+else
+  BUILD_DIR=release
+fi
+BUILD=$BUILD_BASE/${BUILD_DIR}
 BUILD_JS=${BUILD}/js
 BUILD_CSS=${BUILD}/css
 BUILD_DOCS=${BUILD}/docs
@@ -53,6 +47,7 @@ CSS=$(pwd)/css
 echo "Building VisualEvent"
 echo "  Creating media directory ${BUILD}"
 
+rm -rf "$BUILD_BASE"
 mkdir -p "$BUILD"
 
 
@@ -76,7 +71,11 @@ if [ "$DEBUG" != "debug" -a -e $UGLIFYJS ]; then
 	mv "$BUILD_JS/VisualEvent.min.js"          "$BUILD_JS/VisualEvent.js"
 fi
 
-sed "s#__BUILD_URL__#//${SCRIPT_LOC}/${BUILD_DIR}#g" "$BUILD_BASE/VisualEvent_Loader.js" > "$BUILD_BASE/VisualEvent_Loader.tmp.js"
+# This is very obscure..
+# sed "s#A#B#g" assigns A with B (__BUILD_URL__ <= out/${BUILD_DIR}),
+# and then we replace the __BUILD_URL__ in $BUILD_BASE/VisualEvent_Loader.js with
+# the new value and outputs to $BUILD_BASE/VisualEvent_Loader.tmp.js
+sed "s#__BUILD_URL__#/out/${BUILD_DIR}#g" "$BUILD_BASE/VisualEvent_Loader.js" > "$BUILD_BASE/VisualEvent_Loader.tmp.js"
 mv "$BUILD_BASE/VisualEvent_Loader.tmp.js" "$BUILD_BASE/VisualEvent_Loader.js"
 
 

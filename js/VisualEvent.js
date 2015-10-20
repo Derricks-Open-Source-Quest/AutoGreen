@@ -602,7 +602,7 @@ VisualEvent.prototype = {
 			return false;
 		} ).bind( 'mouseover.VisualEvent', function (e) {
 			that.dom.activeEventNode = this;
-			that._lightboxList( e, eventNode.node, eventNode.listeners );
+			that._lightboxList( e, eventNode.node, eventNode.listeners, eventNode.QoSType );
 		} ).bind( 'mouseout.VisualEvent', function (e) {
 			that._lightboxHide();
 		} );
@@ -625,7 +625,7 @@ VisualEvent.prototype = {
 	 *  @param {array} listeners List of listeners attached to the element
 	 *  @private
 	 */
-	"_lightboxList": function ( e, node, listeners )
+	"_lightboxList": function ( e, node, listeners, QoSType )
 	{
 		var that = this;
 		var i, iLen;
@@ -639,7 +639,7 @@ VisualEvent.prototype = {
 		ul = $('ul', this.dom.lightbox).empty();
 		for ( i=0, iLen=listeners.length ; i<iLen ; i++ ) {
 			ul.append( $('<li>'+listeners[i].type+'</li>').bind( 'mouseover.VisualEvent',
-				this._lightboxCode(e, node, listeners[i]) )
+				this._lightboxCode(e, node, listeners[i], QoSType) )
 			);
 		}
 
@@ -659,7 +659,7 @@ VisualEvent.prototype = {
 	 *  @returns {function} Function which will display the code for the event when called
 	 *  @private
 	 */
-	"_lightboxCode": function ( e, node, listener )
+	"_lightboxCode": function ( e, node, listener, QoSType )
 	{
 		var that = this;
 
@@ -676,7 +676,7 @@ VisualEvent.prototype = {
 					setTimeout( function () {
 						that.reInit.call(that);
 					}, 200 );
-				}
+				}, QoSType
 			);
 		};
 	},
@@ -751,7 +751,7 @@ VisualEvent.prototype = {
 	 *  @param {function|null} trigger Function to trigger the event
 	 *  @private
 	 */
-	"_renderCode": function( e, func, source, type, trigger )
+	"_renderCode": function( e, func, source, type, trigger, QoSType)
 	{
 		var that = this;
 		var eventElement = e.target;
@@ -773,6 +773,7 @@ VisualEvent.prototype = {
 				'</p><pre id="Event_code" class="brush: js"></pre></div>' );
 			$('#Event_Trigger').bind( 'click.VisualEvent', trigger );
 		}
+		$('div.Event_Code', this.dom.lightbox).append( '<div> QoSType: '+QoSType+'</div>');
 
 		/* Modify the function slightly such that the white space that is found at the start of the
 		 * last line in the function is also put at the start of the first line. This allows

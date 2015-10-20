@@ -10,6 +10,8 @@
         i, iLen, j, jLen = types.length;
 
     function asyncPush(elements, node, type, func) {
+      // http://stackoverflow.com/questions/12959006/javascript-variables-undefined-within-settimeout-function
+      // settimeout doesn't pass arguments
       setTimeout(function() {
         elements.push({
           "node": node,
@@ -60,6 +62,9 @@
             }
 
             continue;
+          }
+          else if (types[j] == "scroll") {
+            QoSType = "continuous";
           }
 
           elements.push({

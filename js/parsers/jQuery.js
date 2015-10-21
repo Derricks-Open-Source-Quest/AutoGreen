@@ -85,22 +85,6 @@ function jQueryGeneric (elements, eventsObject, node) {
 
     var func;
 
-    // Hijack jQuery .animate()
-    // http://www.bennadel.com/blog/1624-ask-ben-overriding-core-jquery-methods.htm
-    (function(){
-      // Store a reference to the original remove method.
-      var originalAnimateMethod = jQuery.fn.animate;
-      // Define overriding method.
-      jQuery.fn.animate = function(){
-        // Log the fact that we are calling our override.
-        QoSType = "continuous";
-        TypeReason = "[.animate()]"
-        // Execute the original method.
-        originalAnimateMethod.apply( this, arguments );
-      }
-    })();
-
-    var QoSType, TypeReason;
     for ( var type in events ) {
       if ( events.hasOwnProperty( type ) ) {
         /* Ignore live event object - live events are listed as normal events as well */
@@ -114,7 +98,7 @@ function jQueryGeneric (elements, eventsObject, node) {
         // http://stackoverflow.com/questions/500504/why-is-using-for-in-with-array-iteration-such-a-bad-idea
         //for ( var j in oEvents ) {
         for ( var j = 0;j < oEvents.length;j++ ) {
-          //if ( oEvents.hasOwnProperty( j ) ) {
+          if ( oEvents.hasOwnProperty( j ) ) {
             var aNodes = [];
             var sjQuery = "jQuery " + jQuery.fn.jquery;
 
@@ -127,25 +111,8 @@ function jQueryGeneric (elements, eventsObject, node) {
             }
 
             for ( var k=0, kLen=aNodes.length ; k<kLen ; k++ ) {
-              QoSType = "single";
-              TypeReason = "[general]";
-
-              if (type == "scroll") {
-                QoSType = "continuous";
-                TypeReason = "[scroll]"
-              }
-              else if(type == "click" || type == "mouseover" || type == "mouseout") {
-                // Do not trigger click for VE elements
-                // Or we could check aNodes[k].className != "Event_NodeRemove"
-                //if (oEvents[j].namespace != "VisualEvent" && typeof aNodes[k]['onclick'] == "function") {
-                //if (oEvents[j].namespace != "VisualEvent") {
-                //  $(aNodes[k]).trigger(type);
-                //}
-              }
-
               elements.push( {
                 "node": aNodes[k],
-                "QoSType": QoSType+" "+TypeReason,
                 "listeners": []
               } );
 
@@ -176,7 +143,7 @@ function jQueryGeneric (elements, eventsObject, node) {
           if ( elements.length && elements[ elements.length-1 ].listeners.length === 0 ) {
             elements.splice( elements.length-1, 1 );
           }
-        //}
+        }
       }
     }
   }

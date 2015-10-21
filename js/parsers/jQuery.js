@@ -6,144 +6,180 @@
 
 // jQuery 1.5, 1.6
 VE.parsers.push( function () {
-	if ( ! jQuery ||
-		VE.versionCompare( jQuery.fn.jquery, '<', '1.5' ) ||
-		VE.versionCompare( jQuery.fn.jquery, '>=', '1.7' ) )
-	{
-		return [];
-	}
+  if ( ! jQuery ||
+    VE.versionCompare( jQuery.fn.jquery, '<', '1.5' ) ||
+    VE.versionCompare( jQuery.fn.jquery, '>=', '1.7' ) )
+  {
+    return [];
+  }
 
-	var elements = [];
-	for ( var j in jQuery.cache ) {
-		jQueryGenericLoop( elements, jQuery.cache[j] );
-	}
+  var elements = [];
+  for ( var j in jQuery.cache ) {
+    jQueryGenericLoop( elements, jQuery.cache[j] );
+  }
 
-	return elements;
+  return elements;
 });
 
 
 // jQuery 1.4, 1.7
 VE.parsers.push( function () {
-	if ( ! jQuery ) {
-		return [];
-	}
+  if ( ! jQuery ) {
+    return [];
+  }
 
-	if (
-		( VE.versionCompare( jQuery.fn.jquery, '>=', '1.4' ) && VE.versionCompare( jQuery.fn.jquery, '<', '1.5' ) ) ||
-		( VE.versionCompare( jQuery.fn.jquery, '>=', '1.7' ) && VE.versionCompare( jQuery.fn.jquery, '<', '1.8' ) ) )
-	{
-		var elements = [];
-		jQueryGenericLoop( elements, jQuery.cache );
-		return elements;
-	}
+  if (
+    ( VE.versionCompare( jQuery.fn.jquery, '>=', '1.4' ) && VE.versionCompare( jQuery.fn.jquery, '<', '1.5' ) ) ||
+    ( VE.versionCompare( jQuery.fn.jquery, '>=', '1.7' ) && VE.versionCompare( jQuery.fn.jquery, '<', '1.8' ) ) )
+  {
+    var elements = [];
+    jQueryGenericLoop( elements, jQuery.cache );
+    return elements;
+  }
 
-	return [];
+  return [];
 });
 
 
 // jQuery 1.8+
 VE.parsers.push( function () {
-	if ( ! jQuery || VE.versionCompare( jQuery.fn.jquery, '<', '1.8' ) ) {
-		return [];
-	}
+  if ( ! jQuery || VE.versionCompare( jQuery.fn.jquery, '<', '1.8' ) ) {
+    return [];
+  }
 
-	var elements = [];
+  var elements = [];
 
-	// Get all 'live' (on) events
-	$(document).each(function(index1, element) {
-		jQueryGeneric(elements, element, element);
-	});
+  // Get all 'live' (on) events
+  $(document).each(function(index1, element) {
+    jQueryGeneric(elements, element, element);
+  });
 
-	// Get events on nodes
-	$('*').each(function(index1, element) {
-		jQueryGeneric(elements, element, element);
-	});
+  // Get events on nodes
+  $('*').each(function(index1, element) {
+    jQueryGeneric(elements, element, element);
+  });
 
-	return elements;
+  return elements;
 });
 
 
 function jQueryGenericLoop (elements, cache) {
-	$.each( cache, function ( key, val ) {
-		if ( val.handle ) {
-			jQueryGeneric(elements, val, val.handle.elem);
-		}
-	} );
+  $.each( cache, function ( key, val ) {
+    if ( val.handle ) {
+      jQueryGeneric(elements, val, val.handle.elem);
+    }
+  } );
 }
 
 function jQueryGeneric (elements, eventsObject, node) {
-	if ( typeof eventsObject == 'object' ) {
-		var events;
+  if ( typeof eventsObject == 'object' ) {
+    var events;
 
-		if (typeof eventsObject.events == 'object') {
-			events = eventsObject.events;
-		}
+    if (typeof eventsObject.events == 'object') {
+      events = eventsObject.events;
+    }
 
-		if ( ! events ) {
-			events = $._data(eventsObject, 'events');
-		}
+    if ( ! events ) {
+      events = $._data(eventsObject, 'events');
+    }
 
-		var func;
+    var func;
 
-		for ( var type in events ) {
-			if ( events.hasOwnProperty( type ) ) {
-				/* Ignore live event object - live events are listed as normal events as well */
-				if ( type == 'live' ) {
-					continue;
-				}
+    // Hijack jQuery .animate()
+    // http://www.bennadel.com/blog/1624-ask-ben-overriding-core-jquery-methods.htm
+    (function(){
+      // Store a reference to the original remove method.
+      var originalAnimateMethod = jQuery.fn.animate;
+      // Define overriding method.
+      jQuery.fn.animate = function(){
+        // Log the fact that we are calling our override.
+        QoSType = "continuous";
+        TypeReason = "[.animate()]"
+        // Execute the original method.
+        originalAnimateMethod.apply( this, arguments );
+      }
+    })();
 
-				var oEvents = events[type];
+    var QoSType, TypeReason;
+    for ( var type in events ) {
+      if ( events.hasOwnProperty( type ) ) {
+        /* Ignore live event object - live events are listed as normal events as well */
+        if ( type == 'live' ) {
+          continue;
+        }
 
-				for ( var j in oEvents ) {
-					if ( oEvents.hasOwnProperty( j ) ) {
-						var aNodes = [];
-						var sjQuery = "jQuery " + jQuery.fn.jquery;
+        var oEvents = events[type];
 
-						if ( typeof oEvents[j].selector != 'undefined' && oEvents[j].selector !== null ) {
-							aNodes = $(oEvents[j].selector, node);
-							sjQuery += " (live event)";
-						}
-						else {
-							aNodes.push( node );
-						}
+        // You do not want to use for...in for an array..
+        // http://stackoverflow.com/questions/500504/why-is-using-for-in-with-array-iteration-such-a-bad-idea
+        //for ( var j in oEvents ) {
+        for ( var j = 0;j < oEvents.length;j++ ) {
+          //if ( oEvents.hasOwnProperty( j ) ) {
+            var aNodes = [];
+            var sjQuery = "jQuery " + jQuery.fn.jquery;
 
-						for ( var k=0, kLen=aNodes.length ; k<kLen ; k++ ) {
-							elements.push( {
-								"node": aNodes[k],
-								"listeners": []
-							} );
+            if ( typeof oEvents[j].selector != 'undefined' && oEvents[j].selector !== null ) {
+              aNodes = $(oEvents[j].selector, node);
+              sjQuery += " (live event)";
+            }
+            else {
+              aNodes.push( node );
+            }
 
-							if ( typeof oEvents[j].origHandler != 'undefined' ) {
-								func = oEvents[j].origHandler.toString();
-							}
-							else if ( typeof oEvents[j].handler != 'undefined' ) {
-								func = oEvents[j].handler.toString();
-							}
-							else {
-								func = oEvents[j].toString();
-							}
+            for ( var k=0, kLen=aNodes.length ; k<kLen ; k++ ) {
+              QoSType = "single";
+              TypeReason = "[general]";
 
-							/* We use jQuery for the Visual Event events... don't really want to display them */
-							if ( oEvents[j] && oEvents[j].namespace != "VisualEvent" && func != "0" )
-							{
-								elements[ elements.length-1 ].listeners.push( {
-									"type": type,
-									"func": func,
-									"removed": false,
-									"source": sjQuery
-								} );
-							}
-						}
-					}
+              if (type == "scroll") {
+                QoSType = "continuous";
+                TypeReason = "[scroll]"
+              }
+              else if(type == "click" || type == "mouseover" || type == "mouseout") {
+                // Do not trigger click for VE elements
+                // Or we could check aNodes[k].className != "Event_NodeRemove"
+                //if (oEvents[j].namespace != "VisualEvent" && typeof aNodes[k]['onclick'] == "function") {
+                //if (oEvents[j].namespace != "VisualEvent") {
+                //  $(aNodes[k]).trigger(type);
+                //}
+              }
 
-					// Remove elements that didn't have any listeners (i.e. might be a Visual Event node)
-					if ( elements.length && elements[ elements.length-1 ].listeners.length === 0 ) {
-						elements.splice( elements.length-1, 1 );
-					}
-				}
-			}
-		}
-	}
+              elements.push( {
+                "node": aNodes[k],
+                "QoSType": QoSType+" "+TypeReason,
+                "listeners": []
+              } );
+
+              if ( typeof oEvents[j].origHandler != 'undefined' ) {
+                func = oEvents[j].origHandler.toString();
+              }
+              else if ( typeof oEvents[j].handler != 'undefined' ) {
+                func = oEvents[j].handler.toString();
+              }
+              else {
+                func = oEvents[j].toString();
+              }
+
+              /* We use jQuery for the Visual Event events... don't really want to display them */
+              if ( oEvents[j] && oEvents[j].namespace != "VisualEvent" && func != "0" )
+              {
+                elements[ elements.length-1 ].listeners.push( {
+                  "type": type,
+                  "func": func,
+                  "removed": false,
+                  "source": sjQuery
+                } );
+              }
+            }
+          }
+
+          // Remove elements that didn't have any listeners (i.e. might be a Visual Event node)
+          if ( elements.length && elements[ elements.length-1 ].listeners.length === 0 ) {
+            elements.splice( elements.length-1, 1 );
+          }
+        //}
+      }
+    }
+  }
 }
 
 })(window, document, jQuery, VisualEvent);

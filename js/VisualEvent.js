@@ -669,7 +669,7 @@ VisualEvent.prototype = {
 
       var evt = that._createEvent( e, listener.type, e.target );
       that._renderCode( e, listener.func, listener.source, listener.type,
-        evt===null ? null : function(that) {
+        evt===null ? null : function() {
           function prepareTrigger() {
             // Hijack jQuery .animate()
             (function(){
@@ -694,9 +694,10 @@ VisualEvent.prototype = {
               TypeReason = "[rAF]";
               $('div#Event_Code_QoSInfo').html( 'QoSType: '+QoSType+' '+TypeReason);
               listener["QoSType"] = 'QoSType: '+QoSType+' '+TypeReason;
-              originalrAF(function(){
-                callback();
-              });
+              // Do not fire the original rAF
+              // Otherwise QoSType will be set over and over again asynchronously
+              // even when you are mouseover other elements.
+              originalrAF(callback);
             }
 
             // Hijack CSS Transition
@@ -712,9 +713,11 @@ VisualEvent.prototype = {
           node.dispatchEvent(evt);
 
           // Might cause stuff to move around by the activation of the event, so re-init
-          setTimeout( function () {
-            that.reInit.call(that);
-          }, 200 );
+          // This is going to completely reconstruct from scratch..
+          // The QoSType memoized in listeners are also gone..
+          //setTimeout( function () {
+          //  that.reInit.call(that);
+          //}, 200 );
         }, listener
       );
     };

@@ -241,6 +241,7 @@ window.VisualEvent = function ()
   };
 
   this.annotationID = 0;
+  this.allAnnotations = {};
 
   this._construct();
 };
@@ -351,6 +352,9 @@ VisualEvent.prototype = {
       }
       else if ( e.which === 82 ) { // r
         that.reInit();
+      }
+      else if ( e.which === 81 ) { // r
+        console.log(that.allAnnotations);
       }
     } );
 
@@ -677,11 +681,15 @@ VisualEvent.prototype = {
 
         if (node.id == "")
           node.id = listener.QoSAnnotationID;
-        listener.QoSAnnotation = "GreenWeb Annotation: " + 
-                                 node.tagName.toLowerCase() +
+        listener.QoSAnnotation = node.tagName.toLowerCase() +
                                  "#QoSID-" + node.id + ":QoS { on" +
                                  listener.type + ".Type: " + type + ";}";
-        $('div#Event_Code_QoSAnnotation').text(listener.QoSAnnotation);
+        $('div#Event_Code_QoSAnnotation').text("GreenWeb Annotation: " + listener.QoSAnnotation);
+
+        if (!that.allAnnotations.hasOwnProperty("#QoSID-" + node.id)) {
+          that.allAnnotations["#QoSID-" + node.id] = {};
+        }
+        that.allAnnotations["#QoSID-" + node.id][evt.type] = listener.QoSAnnotation;
       }
 
       if (evt.type == "scroll") {
@@ -859,11 +867,11 @@ VisualEvent.prototype = {
       listener.QoSType = "QoSType: Unknown";
     }
     if (!listener.hasOwnProperty('QoSAnnotation')) {
-      listener.QoSAnnotation = "GreenWeb Annotation: Unknown";
+      listener.QoSAnnotation = "Unknown";
     }
 
     $('div.Event_Code', this.dom.lightbox).append( '<div id="Event_Code_QoSInfo">'+listener.QoSType+'</div>');
-    $('div.Event_Code', this.dom.lightbox).append( '<div id="Event_Code_QoSAnnotation">'+listener.QoSAnnotation+'</div>');
+    $('div.Event_Code', this.dom.lightbox).append( '<div id="Event_Code_QoSAnnotation">GreenWeb Annotation: '+listener.QoSAnnotation+'</div>');
 
     /* Modify the function slightly such that the white space that is found at the start of the
      * last line in the function is also put at the start of the first line. This allows

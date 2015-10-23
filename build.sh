@@ -57,7 +57,8 @@ mkdir "$BUILD_JS"
 
 echo "    Combining Javascript files"
 cp  "$JS/VisualEvent_Loader.js"                                               "$BUILD_BASE/VisualEvent_Loader.js"
-cat "$JS/jquery.js" "$JS/shCore.js" "$JS/VisualEvent.js" "$JS"/parsers/*.js > "$BUILD_JS/VisualEvent-jQuery.js"
+#cat "$JS/jquery.js" "$JS/shCore.js" "$JS/VisualEvent.js" "$JS"/parsers/*.js > "$BUILD_JS/VisualEvent-jQuery.js"
+cat "$JS/jquery-1.10.2.js" "$JS/shCore.js" "$JS/VisualEvent.js" "$JS"/parsers/*.js > "$BUILD_JS/VisualEvent-jQuery.js"
 cat                 "$JS/shCore.js" "$JS/VisualEvent.js" "$JS"/parsers/*.js > "$BUILD_JS/VisualEvent.js"
 
 if [ "$DEBUG" != "debug" -a -e $UGLIFYJS ]; then

@@ -676,7 +676,7 @@ VisualEvent.prototype = {
         $('div#Event_Code_QoSInfo').text(listener.QoSType);
 
         if (node.id == "")
-          node.id = listener["QoSAnnotationID"];
+          node.id = listener.QoSAnnotationID;
         listener.QoSAnnotation = "GreenWeb Annotation: " + 
                                  node.tagName.toLowerCase() +
                                  "#QoSID-" + node.id + ":QoS { on" +
@@ -688,6 +688,14 @@ VisualEvent.prototype = {
         QoSType = "continuous";
         TypeReason = "[scroll]";
         addQoSAnnotation(QoSType, TypeReason);
+
+	// We must return here!  If we continue execution, the scroll event
+	// will also register an ontransitioned callback, in which case, |node|
+	// will have multiple (exactly the same) ontransitioned callbacks
+	// (which apparently is allowed!) such that when the css transition
+	// finishes (which is asynchronous), multiple callbacks will be
+	// executed, and the QoS info of the scroll event might get overwritten.
+        return;
       } else if (evt.type == "click") {
         QoSType = "single";
         TypeReason = "[default]";
@@ -848,14 +856,14 @@ VisualEvent.prototype = {
     }
 
     if (!listener.hasOwnProperty('QoSType')) {
-      listener["QoSType"] = "QoSType: Unknown";
+      listener.QoSType = "QoSType: Unknown";
     }
     if (!listener.hasOwnProperty('QoSAnnotation')) {
-      listener["QoSAnnotation"] = "GreenWeb Annotation: Unknown";
+      listener.QoSAnnotation = "GreenWeb Annotation: Unknown";
     }
 
-    $('div.Event_Code', this.dom.lightbox).append( '<div id="Event_Code_QoSInfo">'+listener["QoSType"]+'</div>');
-    $('div.Event_Code', this.dom.lightbox).append( '<div id="Event_Code_QoSAnnotation">'+listener["QoSAnnotation"]+'</div>');
+    $('div.Event_Code', this.dom.lightbox).append( '<div id="Event_Code_QoSInfo">'+listener.QoSType+'</div>');
+    $('div.Event_Code', this.dom.lightbox).append( '<div id="Event_Code_QoSAnnotation">'+listener.QoSAnnotation+'</div>');
 
     /* Modify the function slightly such that the white space that is found at the start of the
      * last line in the function is also put at the start of the first line. This allows

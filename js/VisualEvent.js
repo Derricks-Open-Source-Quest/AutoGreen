@@ -669,8 +669,8 @@ VisualEvent.prototype = {
   "_lightboxCode": function ( e, node, listener )
   {
     var that = this;
-    
-    function prepareTrigger() {
+
+    function prepareTrigger(evt) {
       function addQoSAnnotation (type, reason) {
         listener.QoSType = 'QoSType: '+type+' '+reason;
         $('div#Event_Code_QoSInfo').text(listener.QoSType);
@@ -682,6 +682,16 @@ VisualEvent.prototype = {
                                  "#QoSID-" + node.id + ":QoS { on" +
                                  listener.type + ".Type: " + type + ";}";
         $('div#Event_Code_QoSAnnotation').text(listener.QoSAnnotation);
+      }
+
+      if (evt.type == "scroll") {
+        QoSType = "continuous";
+        TypeReason = "[scroll]";
+        addQoSAnnotation(QoSType, TypeReason);
+      } else if (evt.type == "click") {
+        QoSType = "single";
+        TypeReason = "[default]";
+        addQoSAnnotation(QoSType, TypeReason);
       }
 
       // Hijack jQuery .animate()
@@ -729,8 +739,9 @@ VisualEvent.prototype = {
       var evt = that._createEvent( e, listener.type, e.target );
       that._renderCode( e, listener.func, listener.source, listener.type,
         evt===null ? null : function() {
-          prepareTrigger();
-          node.dispatchEvent(evt);
+          prepareTrigger(evt);
+          if (evt.type !== "scroll") // scroll is handled by prepareTrigger
+            node.dispatchEvent(evt);
 
           // Might cause stuff to move around by the activation of the event, so re-init
           // This is going to completely reconstruct from scratch..
@@ -738,7 +749,7 @@ VisualEvent.prototype = {
           //setTimeout( function () {
           //  that.reInit.call(that);
           //}, 200 );
-        }, listener, node
+        }, listener
       );
     };
   },
@@ -813,7 +824,7 @@ VisualEvent.prototype = {
    *  @param {function|null} trigger Function to trigger the event
    *  @private
    */
-  "_renderCode": function( e, func, source, type, trigger, listener, node)
+  "_renderCode": function( e, func, source, type, trigger, listener)
   {
     var that = this;
     var eventElement = e.target;
@@ -835,14 +846,13 @@ VisualEvent.prototype = {
         '</p><pre id="Event_code" class="brush: js"></pre></div>' );
       $('#Event_Trigger').bind( 'click.VisualEvent', trigger );
     }
+
     if (!listener.hasOwnProperty('QoSType')) {
-      if (type == "scroll")
-        listener["QoSType"] = "QoSType: continuous [scroll]";
-      else
-        listener["QoSType"] = "QoSType: Unknown";
+      listener["QoSType"] = "QoSType: Unknown";
     }
-    if (!listener.hasOwnProperty('QoSAnnotation'))
+    if (!listener.hasOwnProperty('QoSAnnotation')) {
       listener["QoSAnnotation"] = "GreenWeb Annotation: Unknown";
+    }
 
     $('div.Event_Code', this.dom.lightbox).append( '<div id="Event_Code_QoSInfo">'+listener["QoSType"]+'</div>');
     $('div.Event_Code', this.dom.lightbox).append( '<div id="Event_Code_QoSAnnotation">'+listener["QoSAnnotation"]+'</div>');

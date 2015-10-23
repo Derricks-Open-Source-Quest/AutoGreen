@@ -240,6 +240,8 @@ window.VisualEvent = function ()
     "activeEventNode": null
   };
 
+  this.annotationID = 0;
+
   this._construct();
 };
 
@@ -596,6 +598,11 @@ VisualEvent.prototype = {
       label.style.height = (eventNode.node.offsetHeight-4)+'px';
     }
 
+    /* Add QoS annotation ID */
+    for ( var i=0; i<eventNode.listeners.length; i++ ) {
+      eventNode.listeners[i].QoSAnnotationID = this.annotationID++;
+    }
+
     /* Event listeners for showing the lightbox for this element */
     $(label).bind( 'dblclick.VisualEvent', function (e) {
       this.style.display = "none";
@@ -662,6 +669,58 @@ VisualEvent.prototype = {
   "_lightboxCode": function ( e, node, listener )
   {
     var that = this;
+    
+    function prepareTrigger() {
+      function addQoSAnnotation (type, reason) {
+        listener.QoSType = 'QoSType: '+type+' '+reason;
+        $('div#Event_Code_QoSInfo').text(listener.QoSType);
+
+        if (node.id == "")
+          node.id = listener["QoSAnnotationID"];
+        listener.QoSAnnotation = "GreenWeb Annotation: " + 
+                                 node.tagName.toLowerCase() +
+                                 "#QoSID-" + node.id + ":QoS { on" +
+                                 listener.type + ".Type: " + type + ";}";
+        $('div#Event_Code_QoSAnnotation').text(listener.QoSAnnotation);
+      }
+
+      // Hijack jQuery .animate()
+      (function(){
+        // Store a reference to the original remove method.
+        var originalAnimateMethod = jQuery.fn.animate;
+        // Define overriding method.
+        jQuery.fn.animate = function(){
+          var QoSType = "continuous";
+          var TypeReason = "[.animate()]"
+          addQoSAnnotation(QoSType, TypeReason);
+
+          // Do not execute the original method, which will cause this overloaded
+          // function to be called, and set QoSType, over and over again, even when
+          // other events are being executed.
+          //originalAnimateMethod.apply( this, arguments );
+        }
+      })();
+
+      // Hijack rAF
+      var originalrAF = requestAnimationFrame;
+      requestAnimationFrame = function(callback){
+        QoSType = "continuous";
+        TypeReason = "[rAF]";
+        addQoSAnnotation(QoSType, TypeReason);
+
+        // Do not execute the original method, which will cause this overloaded
+        // function to be called, and set QoSType, over and over again, even when
+        // other events are being executed.
+        //originalrAF(callback);
+      }
+
+      // Hijack CSS Transition
+      node.addEventListener("transitionend", function () {
+        QoSType = "continuous";
+        TypeReason = "[CSSTransition]";
+        addQoSAnnotation(QoSType, TypeReason);
+      }, true);
+    }
 
     return function () {
       $('li', this.parentNode).removeClass( 'Event_EventSelected' );
@@ -670,47 +729,6 @@ VisualEvent.prototype = {
       var evt = that._createEvent( e, listener.type, e.target );
       that._renderCode( e, listener.func, listener.source, listener.type,
         evt===null ? null : function() {
-          function prepareTrigger() {
-            // Hijack jQuery .animate()
-            (function(){
-              // Store a reference to the original remove method.
-              var originalAnimateMethod = jQuery.fn.animate;
-              // Define overriding method.
-              jQuery.fn.animate = function(){
-                // Log the fact that we are calling our override.
-                var QoSType = "continuous";
-                var TypeReason = "[.animate()]"
-                $('div#Event_Code_QoSInfo').text('QoSType: '+QoSType+' '+TypeReason);
-                listener["QoSType"] = 'QoSType: '+QoSType+' '+TypeReason;
-                // Do not execute the original method, which will cause this overloaded
-                // function to be called, and set QoSType, over and over again, even when
-                // other events are being executed.
-                //originalAnimateMethod.apply( this, arguments );
-              }
-            })();
-
-            // Hijack rAF
-            var originalrAF = requestAnimationFrame;
-            requestAnimationFrame = function(callback){
-              QoSType = "continuous";
-              TypeReason = "[rAF]";
-              $('div#Event_Code_QoSInfo').html( 'QoSType: '+QoSType+' '+TypeReason);
-              listener["QoSType"] = 'QoSType: '+QoSType+' '+TypeReason;
-              // Do not execute the original method, which will cause this overloaded
-              // function to be called, and set QoSType, over and over again, even when
-              // other events are being executed.
-              //originalrAF(callback);
-            }
-
-            // Hijack CSS Transition
-            node.addEventListener("transitionend", function () {
-              QoSType = "continuous";
-              TypeReason = "[CSSTransition]";
-              $('div#Event_Code_QoSInfo').html( 'QoSType: '+QoSType+' '+TypeReason);
-              listener["QoSType"] = 'QoSType: '+QoSType+' '+TypeReason;
-            }, true);
-          }
-
           prepareTrigger();
           node.dispatchEvent(evt);
 
@@ -720,7 +738,7 @@ VisualEvent.prototype = {
           //setTimeout( function () {
           //  that.reInit.call(that);
           //}, 200 );
-        }, listener
+        }, listener, node
       );
     };
   },
@@ -795,7 +813,7 @@ VisualEvent.prototype = {
    *  @param {function|null} trigger Function to trigger the event
    *  @private
    */
-  "_renderCode": function( e, func, source, type, trigger, listener)
+  "_renderCode": function( e, func, source, type, trigger, listener, node)
   {
     var that = this;
     var eventElement = e.target;
@@ -823,7 +841,11 @@ VisualEvent.prototype = {
       else
         listener["QoSType"] = "QoSType: Unknown";
     }
+    if (!listener.hasOwnProperty('QoSAnnotation'))
+      listener["QoSAnnotation"] = "GreenWeb Annotation: Unknown";
+
     $('div.Event_Code', this.dom.lightbox).append( '<div id="Event_Code_QoSInfo">'+listener["QoSType"]+'</div>');
+    $('div.Event_Code', this.dom.lightbox).append( '<div id="Event_Code_QoSAnnotation">'+listener["QoSAnnotation"]+'</div>');
 
     /* Modify the function slightly such that the white space that is found at the start of the
      * last line in the function is also put at the start of the first line. This allows

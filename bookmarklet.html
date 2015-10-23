@@ -64,23 +64,24 @@
         <a id="bookmarklet" href="">VisualGreen</a>
       </p>
           
-      <textarea id="js">(function() {
-        var url = 'https://localhost:8000/out/VisualEvent_Loader.js';
-        
-        if( typeof VisualEvent!='undefined' ) {
-          if ( VisualEvent.instance !== null ) {
-            VisualEvent.close();
+      <textarea id="js">
+        (function() {
+          var url = 'https://localhost:8000/out/VisualEvent_Loader.js';
+          
+          if( typeof VisualEvent!='undefined' ) {
+            if ( VisualEvent.instance !== null ) {
+              VisualEvent.close();
+            }
+            else {
+              new VisualEvent();
+            }
           }
           else {
-            new VisualEvent();
+            var n=document.createElement('script');
+            n.setAttribute('language','JavaScript');
+            n.setAttribute('src',url+'?rand='+new Date().getTime());
+            document.body.appendChild(n);
           }
-        }
-        else {
-          var n=document.createElement('script');
-          n.setAttribute('language','JavaScript');
-          n.setAttribute('src',url+'?rand='+new Date().getTime());
-          document.body.appendChild(n);
-        }
         })();
       </textarea>
     </div>

@@ -682,8 +682,10 @@ VisualEvent.prototype = {
                 var TypeReason = "[.animate()]"
                 $('div#Event_Code_QoSInfo').text('QoSType: '+QoSType+' '+TypeReason);
                 listener["QoSType"] = 'QoSType: '+QoSType+' '+TypeReason;
-                // Execute the original method.
-                originalAnimateMethod.apply( this, arguments );
+                // Do not execute the original method, which will cause this overloaded
+                // function to be called, and set QoSType, over and over again, even when
+                // other events are being executed.
+                //originalAnimateMethod.apply( this, arguments );
               }
             })();
 
@@ -694,10 +696,10 @@ VisualEvent.prototype = {
               TypeReason = "[rAF]";
               $('div#Event_Code_QoSInfo').html( 'QoSType: '+QoSType+' '+TypeReason);
               listener["QoSType"] = 'QoSType: '+QoSType+' '+TypeReason;
-              // Do not fire the original rAF
-              // Otherwise QoSType will be set over and over again asynchronously
-              // even when you are mouseover other elements.
-              originalrAF(callback);
+              // Do not execute the original method, which will cause this overloaded
+              // function to be called, and set QoSType, over and over again, even when
+              // other events are being executed.
+              //originalrAF(callback);
             }
 
             // Hijack CSS Transition

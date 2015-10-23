@@ -704,7 +704,8 @@ VisualEvent.prototype = {
 	// finishes (which is asynchronous), multiple callbacks will be
 	// executed, and the QoS info of the scroll event might get overwritten.
         return;
-      } else if (evt.type == "click") {
+      }
+      else if (evt.type == "click" || evt.type == "keyup" || evt.type == "focus") {
         QoSType = "single";
         TypeReason = "[default]";
         addQoSAnnotation(QoSType, TypeReason);

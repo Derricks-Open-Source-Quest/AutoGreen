@@ -47,21 +47,30 @@
   </head>
   <body>
     <div id="wrapper">
-      <h1>Visual Event bookmarklet generator</h1>
+      <h1>AutoGreen bookmarklet generator</h1>
       <p>
-        Visual Event is a bookmarklet which will visually show you which elements on an HTML 
-        page have Javascript events assigned to them. This page can be used to generate the
-        bookmarklet that you want to use for testing or deployment of Visual Event.
+
+AutoGreen works as a browser bookmarklet, which is essentially a piece of
+JavaScript code that gets injected to the end of a Web application. The
+following JavaScript code in the textarea is the code that will be injected.
+To generate the AutoGreen bookmarklet, drag the <i>AutoGreen</i> link to your
+bookmarklet bar. To change the injected code, you could simply modify the code
+in the textarea below and the <i>AutoGreen</i> link will be dynamically
+updated. Do not forget to drag the <i>AutoGreen</i> link to the bookmarklet bar
+again after changes are made.
+
       </p>
       <p>
-        To generate a bookmarklet, modify the Javascript in the textarea below, the 
-        bookmarklet link will be updated as you type (typically you will only need to
-        change the URL to load Visual Event) and then click and drag the
-        <i>Visual Event</i> link to your bookmarklet bar.
+
+AutoGreen owes a great debt of gratitude to <a
+href="https://github.com/DataTables/VisualEvent">Visual Events</a>, which
+automatically identifies details of all JavaScript events associated with all
+DOM elements on a Web application (webpage).
+
       </p>
       
       <p style="text-align:center">
-        <a id="bookmarklet" href="">VisualGreen</a>
+        <a id="bookmarklet" href="">AutoGreen</a> (Drag me to the bookmarklet bar)
       </p>
           
       <textarea id="js">

@@ -80,7 +80,7 @@ VisualEvent_Loader.prototype = {
     var that = this,
       loading,
       style,
-                        protocol = "https://localhost:8000"
+      protocol = "https://localhost:8000"
 
     /* Check to see if already loaded */
     if ( this.s.loadingComplete === true ) {
@@ -121,7 +121,7 @@ VisualEvent_Loader.prototype = {
     }
 
     /* Load the required files - note that the token __BUILD_URL__ is replaced by the build
-     * script with the location of the combined Visual Event file (i.e. with the parsers included
+     * script with the location of the combined Visual Event file (i.e. with the parsers included)
      */
     this._loadFile( protocol+'__BUILD_URL__/css/VisualEvent.css', 'css' );
     if ( typeof jQuery == 'undefined' ) {

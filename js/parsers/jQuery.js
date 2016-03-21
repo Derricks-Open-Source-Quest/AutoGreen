@@ -129,6 +129,7 @@ function jQueryGeneric (elements, eventsObject, node) {
               /* We use jQuery for the Visual Event events... don't really want to display them */
               if ( oEvents[j] && oEvents[j].namespace != "VisualEvent" && func != "0" )
               {
+                // Only insert events that are directly triggered from click and touch
                 if (type === "click" ||
                     type === "scroll" ||
                     type === "touchstart" ||

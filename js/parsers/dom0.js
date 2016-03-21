@@ -12,6 +12,7 @@
     for ( i=0, iLen=all.length ; i<iLen ; i++ ) {
       for ( j=0 ; j<jLen ; j++ ) {
         if ( typeof all[i]['on'+types[j]] == 'function' ) {
+          // Only insert events that are directly triggered from click and touch
           if (types[j] === "click" ||
               types[j] === "scroll" ||
               types[j] === "touchstart" ||

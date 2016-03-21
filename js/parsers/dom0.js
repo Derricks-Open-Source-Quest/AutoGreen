@@ -12,15 +12,22 @@
     for ( i=0, iLen=all.length ; i<iLen ; i++ ) {
       for ( j=0 ; j<jLen ; j++ ) {
         if ( typeof all[i]['on'+types[j]] == 'function' ) {
-          elements.push({
-            "node": all[i],
-            "listeners": [{
-              "type": types[j],
-              "func": all[i]['on'+types[j]].toString(),
-              "removed": false,
-              "source": 'DOM 0 event'
-            }]
-          });
+          if (types[j] === "click" ||
+              types[j] === "scroll" ||
+              types[j] === "touchstart" ||
+              types[j] === "touchend" ||
+              types[j] === "touchmove")
+          {
+            elements.push({
+              "node": all[i],
+              "listeners": [{
+                "type": types[j],
+                "func": all[i]['on'+types[j]].toString(),
+                "removed": false,
+                "source": 'DOM 0 event'
+              }]
+            });
+          }
         }
       }
     }

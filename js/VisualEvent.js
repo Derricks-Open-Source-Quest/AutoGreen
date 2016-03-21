@@ -743,6 +743,9 @@ VisualEvent.prototype = {
 
       // Hijack CSS Transition
       node.addEventListener("transitionend", function () {
+        // This might be wrong because an event on node A might modify style
+        // property of node B, in which case we should register the
+        // transitionend event on node B, rather than A.
         QoSType = "continuous";
         TypeReason = "[CSSTransition]";
         addQoSAnnotation(QoSType, TypeReason);

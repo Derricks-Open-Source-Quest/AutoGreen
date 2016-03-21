@@ -129,12 +129,19 @@ function jQueryGeneric (elements, eventsObject, node) {
               /* We use jQuery for the Visual Event events... don't really want to display them */
               if ( oEvents[j] && oEvents[j].namespace != "VisualEvent" && func != "0" )
               {
-                elements[ elements.length-1 ].listeners.push( {
-                  "type": type,
-                  "func": func,
-                  "removed": false,
-                  "source": sjQuery
-                } );
+                if (type === "click" ||
+                    type === "scroll" ||
+                    type === "touchstart" ||
+                    type === "touchend" ||
+                    type === "touchmove")
+                {
+                  elements[ elements.length-1 ].listeners.push( {
+                    "type": type,
+                    "func": func,
+                    "removed": false,
+                    "source": sjQuery
+                  } );
+                }
               }
             }
           }

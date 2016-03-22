@@ -692,7 +692,7 @@ VisualEvent.prototype = {
         that.allAnnotations["#QoSID-" + node.id][evt.type] = listener.QoSAnnotation;
       }
 
-      if (evt.type == "scroll") {
+      if (evt.type == "scroll" || evt.type == "touchmove") {
         QoSType = "continuous";
         TypeReason = "[scroll]";
         addQoSAnnotation(QoSType, TypeReason);
@@ -705,7 +705,12 @@ VisualEvent.prototype = {
 	// executed, and the QoS info of the scroll event might get overwritten.
         return;
       }
-      else if (evt.type == "click" || evt.type == "keyup" || evt.type == "focus") {
+      else if (evt.type == "click" ||
+               evt.type == "keyup" ||
+               evt.type == "touchstart" ||
+               evt.type == "touchend" ||
+               evt.type == "keyup" ||
+               evt.type == "focus") {
         QoSType = "single";
         TypeReason = "[default]";
         addQoSAnnotation(QoSType, TypeReason);
@@ -976,6 +981,8 @@ VisualEvent.prototype = {
     var typeGroup = this._eventTypeGroup( type );
 
     if ( document.createEvent ) {
+      // TODO: initXEvent is a deprecated approach of initializing an event
+      // e.g., see: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/initMouseEvent
       switch ( typeGroup ) {
         case 'mouse':
           evt = document.createEvent( "MouseEvents" );
@@ -1172,9 +1179,15 @@ VisualEvent.prototype = {
       case 'submit':
         return 'html';
 
+      // TouchEvent is a subclass of UIEvent
+      // http://stackoverflow.com/questions/29018151/how-do-i-programmatically-create-a-touchevent-in-chrome-41
+      // https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent
       case 'keydown':
       case 'keypress':
       case 'keyup':
+      case 'touchstart':
+      case 'touchmove':
+      case 'touchend':
       case 'load':
       case 'unload':
         return 'ui';

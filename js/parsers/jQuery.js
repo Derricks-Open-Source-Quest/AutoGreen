@@ -78,6 +78,7 @@ function jQueryGeneric (elements, eventsObject, node) {
     // |events| is no longer available from v1.8
     // Need to use |$._data(element, 'events');| instead
     // http://stackoverflow.com/questions/2518421/jquery-find-events-handlers-registered-with-an-object
+    // TODO: It currently does not support getting event inherit from parents, nor events that are bubbled up from children.
     if (typeof eventsObject.events == 'object') {
       events = eventsObject.events;
     }
@@ -88,6 +89,7 @@ function jQueryGeneric (elements, eventsObject, node) {
 
     var func;
 
+    // Iterate through all events associated with |eventsObject|
     for ( var type in events ) {
       if ( events.hasOwnProperty( type ) ) {
         /* Ignore live event object - live events are listed as normal events as well */
@@ -97,8 +99,9 @@ function jQueryGeneric (elements, eventsObject, node) {
 
         var oEvents = events[type];
 
-        // You do not want to use for...in for an array..
-        // http://stackoverflow.com/questions/500504/why-is-using-for-in-with-array-iteration-such-a-bad-idea
+        // Iterate through all events that are of type |type|
+        // You do not want to use for...in for an array
+        // See: http://stackoverflow.com/questions/500504/why-is-using-for-in-with-array-iteration-such-a-bad-idea
         //for ( var j in oEvents ) {
         for ( var j = 0;j < oEvents.length;j++ ) {
           if ( oEvents.hasOwnProperty( j ) ) {

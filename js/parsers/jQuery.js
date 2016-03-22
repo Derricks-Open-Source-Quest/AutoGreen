@@ -75,6 +75,9 @@ function jQueryGeneric (elements, eventsObject, node) {
   if ( typeof eventsObject == 'object' ) {
     var events;
 
+    // |events| is no longer available from v1.8
+    // Need to use |$._data(element, 'events');| instead
+    // http://stackoverflow.com/questions/2518421/jquery-find-events-handlers-registered-with-an-object
     if (typeof eventsObject.events == 'object') {
       events = eventsObject.events;
     }

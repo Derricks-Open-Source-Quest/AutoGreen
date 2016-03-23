@@ -4,7 +4,7 @@ AutoGreen is a system that automatically annotates (mobile) Web applications to 
 
 This is a project from the [Electrical and Computer Engineering Department](http://www.ece.utexas.edu/) at [The University of Texas at Austin](http://www.utexas.edu/).
 
-# Overview
+## Overview
 
 AutoGreen works as a browser bookmarklet, which is essentially a piece of JavaScript code that gets injected to the end of a Web application. The following JavaScript code in the textarea is the code that will be injected.  To generate the AutoGreen bookmarklet, drag the <i>AutoGreen</i> link to your bookmarklet bar. To change the injected code, you could simply modify the code in the textarea below and the <i>AutoGreen</i> link will be dynamically updated. Do not forget to drag the <i>AutoGreen</i> link to the bookmarklet bar again after changes are made.
 

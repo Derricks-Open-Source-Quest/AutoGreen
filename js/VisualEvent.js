@@ -1049,9 +1049,6 @@ VisualEvent.prototype = {
           evt.initMouseEvent( type, true, true, window, 0, null, null,
             null, null, false, false, false,
             false, 0, null );
-          //evt.initMouseEvent( type, true, true, window, 0, offset.left, offset.top,
-          //  offset.left, offset.top, originalEvt.ctrlKey, originalEvt.altKey, originalEvt.shiftKey,
-          //  originalEvt.metaKey, originalEvt.button, null );
           break;
 
         case 'html':

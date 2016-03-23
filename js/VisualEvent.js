@@ -354,8 +354,17 @@ VisualEvent.prototype = {
       else if ( e.which === 82 ) { // r
         that.reInit();
       }
-      else if ( e.which === 81 ) { // r
+      else if ( e.which === 81 ) { // q
         console.log(that.allAnnotations);
+      }
+      else if ( e.which === 68 ) { // d
+        if ( this.s.elements === null ) {
+          console.log("Events not initialized!");
+        } else {
+          for ( i=0, iLen=this.s.elements.length ; i<iLen ; i++ ) {
+            this._annotateElement( this.s.elements[i] );
+          }
+        }
       }
     } );
 
@@ -530,6 +539,27 @@ VisualEvent.prototype = {
   },
 
 
+  /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+   * Annotation
+   */
+
+  /**
+   * Annotate a node that has at least one event subscribed to it
+   *  @param {object} eventNode Event information for this node in the same format as 
+   *    VisualEvent.s.elements objects
+   *  @private
+   */
+  "_annotateElement": function ( eventNode )
+  {
+    // Element is hidden
+    if ( $(eventNode.node).filter(':visible').length === 0 ) {
+      return;
+    }
+
+    for ( var i=0; i<eventNode.listeners.length; i++ ) {
+      this._lightboxCode(e, node, listeners[i]);
+    }
+  },
 
   /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * Display

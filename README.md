@@ -4,9 +4,19 @@ AutoGreen is a system that automatically annotates (mobile) Web applications to 
 
 This is a project from the [Electrical and Computer Engineering Department](http://www.ece.utexas.edu/) at [The University of Texas at Austin](http://www.utexas.edu/). See the contributors and acknowledgement at the end for more information.
 
-## Overview
+## Installation and Usage
 
-AutoGreen works as a browser bookmarklet, which is essentially a piece of JavaScript code that gets injected to the end of a Web application. The following JavaScript code in the textarea is the code that will be injected.  To generate the AutoGreen bookmarklet, drag the <i>AutoGreen</i> link to your bookmarklet bar. To change the injected code, you could simply modify the code in the textarea below and the <i>AutoGreen</i> link will be dynamically updated. Do not forget to drag the <i>AutoGreen</i> link to the bookmarklet bar again after changes are made.
+**Installation** AutoGreen works as a browser bookmarklet, which is essentially a piece of JavaScript code that gets injected to the end of a Web application. Install it in following steps:
+* Build the AutoGreen code by `sh ./build.sh`. This will generate AutoGreen code in the `out/` directory. Supply the `c` commandline option (i.e., `sh ./build.sh c`) to compress the JavaScript code in AutoGreen. Supply the `d` option for generating [JSDoc](http://usejsdoc.org/) documentations for AutoGreen. Supply `cd` for doing both.
+* Host AutoGreen in a HTTPS server because most browsers do not allow loading resources from the local file system. The repo checkout contains a simple python-based HTTPS server. To use that simply run `python simple-https-server.py` in the repo directory.
+* Open the bookmarklet generation page `bookmarklet.html` in a Web browser, and drag the *AutoGreen* link to your bookmark bar. For more details take a look at the code in `bookmarklet.html`. Otherwise, that's all!
+
+**Usage** Navigate to the Web application (webpage) that you want to apply GreenWeb annotations to.
+* Click *AutoGreen* on your browser bookmarklet bar. DOM nodes with JavaScript events will be highlighted.
+* Move the mouse over any highlighted DOM node to display the AutoGreen panel which shows further event details. GreenWeb annotation information (at the bottom of the panel) is "Unknown" at this point.
+* Click "trigger event" link on the AutoGreen panel to dispatch an event. After the event finishes execution, AutoGreen will automatically update the GreenWeb annotations.
+
+## How does AutoGreen Work
 
 AutoGreen owes a great debt of gratitude to <a href="https://github.com/DataTables/VisualEvent">Visual Events</a>, which automatically identifies details of all JavaScript events associated with all DOM elements on a Web application (webpage).
 

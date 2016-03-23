@@ -26,11 +26,13 @@ The high-level structure of this repo is as follows:
 **Usage** Navigate to the Web application (webpage) that you want to apply GreenWeb annotations to.
 * Click *AutoGreen* on your browser bookmarklet bar. DOM nodes with JavaScript events will be highlighted.
 * Move the mouse over any highlighted DOM node to display the AutoGreen panel which shows further event details. GreenWeb annotation information (at the bottom of the panel) is "Unknown" at this point.
-* Click "trigger event" link on the AutoGreen panel to dispatch an event. After the event finishes execution, AutoGreen will automatically update the GreenWeb annotations.
+* Click "trigger event" link on the AutoGreen panel to dispatch the selected event. After the event finishes execution, AutoGreen will automatically update the GreenWeb annotations.
 
 ## How AutoGreen Works
 
-#### Brief Introduction of GreenWeb Language Extensions
+#### A Brief Introduction of GreenWeb Language Extensions
+
+AutoGreen is a system that automatically annotates Web applications with GreenWeb language extensions. Here we provide a brief overview of GreenWeb. More details can be found in this paper.
 
 #### How AutoGreen Applies GreenWeb Annotations
 
@@ -38,7 +40,11 @@ AutoGreen mainly consists of two phases. The first phase is to detect the JavaSc
 
 For the event detection phase, AutoGreen owes a great debt of gratitude to <a href="https://github.com/DataTables/VisualEvent">Visual Events</a>, which automatically identifies the details of all JavaScript events associated with all DOM elements on a Web application (webpage). In fact, AutoGreen started as a fork of Visual Events. Take a look at Visual Events' [readme](VisualEvents.README.md) for more details of the event detection phase.
 
-For the QoS detection phase, AutoGreen performs a profiling run of each event by explicitly triggering its callback function. During the callback execution, AutoGreen checks for certain conditions to determine an event’s QoS type as follows. An event’s QoS type is set to “continuous” if its callback function triggers a jQuery `animate()` function, a `rAF`, or a CSS transition/animation. Otherwise the QoS type is set to “single.” To detect `animate()` and `rAF`, we overload their original functions and check in the overloaded function. To detect CSS transition/animation, we register a `transitionend`/`animationend` event, which if triggered indicates that a CSS transition/animation exists. As a proof-of-concept prototype, our current implementation does not yet support checking other ways of realizing animations, but could be trivially extended to do so by following a similar detection procedure as described above.
+For the QoS detection phase, AutoGreen performs a profiling run of each event by explicitly triggering its callback function. During the callback execution, AutoGreen checks for certain conditions to determine an event’s QoS type as follows. An event’s QoS type is set to “continuous” if its callback function triggers a jQuery `animate()` function, a `rAF`, or a CSS transition/animation. Otherwise the QoS type is set to “single.”
+* To detect `animate()` and `rAF`, we overload their original functions and check in the overloaded function.
+* To detect CSS transition/animation, we register a `transitionend`/`animationend` event, which if triggered indicates that a CSS transition/animation exists.
+
+As a proof-of-concept prototype, our current implementation does not yet support checking other ways of realizing animations, but could be trivially extended to do so by following a similar detection procedure as described above.
 
 ## Contributors and Acknowledgments
 

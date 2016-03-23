@@ -365,6 +365,7 @@ VisualEvent.prototype = {
           for ( i=0, iLen=that.s.elements.length ; i<iLen ; i++ ) {
             that._annotateElement( that.s.elements[i] );
           }
+          console.log(that.allAnnotations);
         }
       }
     } );
@@ -558,6 +559,7 @@ VisualEvent.prototype = {
     }
 
     for ( var i=0; i<eventNode.listeners.length; i++ ) {
+      //TODO: do not annotate nodes that are just anchor links
       this._annotateEvent(eventNode.node, eventNode.listeners[i]);
     }
   },

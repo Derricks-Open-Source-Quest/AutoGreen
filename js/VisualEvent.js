@@ -588,6 +588,8 @@ VisualEvent.prototype = {
       that.allAnnotations["#QoSID-" + node.id][evt.type] = listener.QoSAnnotation;
     }
 
+    var QoSType, TypeReason;
+
     if (evt.type == "scroll" || evt.type == "touchmove") {
       QoSType = "continuous";
       TypeReason = "[scroll]";
@@ -613,21 +615,21 @@ VisualEvent.prototype = {
     }
 
     // Hijack jQuery .animate()
-    (function(){
-      // Store a reference to the original remove method.
-      var originalAnimateMethod = jQuery.fn.animate;
-      // Define overriding method.
-      jQuery.fn.animate = function(){
-        var QoSType = "continuous";
-        var TypeReason = "[.animate()]"
-        addQoSAnnotation(QoSType, TypeReason);
+    // Store a reference to the original remove method.
+    var originalAnimateMethod = jQuery.fn.animate;
+    // Define overriding method.
+    jQuery.fn.animate = function(){
+      //var QoSType = "continuous";
+      //var TypeReason = "[.animate()]"
+      QoSType = "continuous";
+      TypeReason = "[.animate()]"
+      addQoSAnnotation(QoSType, TypeReason);
 
-        // Do not execute the original method, which will cause this overloaded
-        // function to be called, and set QoSType, over and over again, even when
-        // other events are being executed.
-        //originalAnimateMethod.apply( this, arguments );
-      }
-    })();
+      // Do not execute the original method, which will cause this overloaded
+      // function to be called, and set QoSType, over and over again, even when
+      // other events are being executed.
+      //originalAnimateMethod.apply( this, arguments );
+    }
 
     // Hijack rAF
     var originalrAF = requestAnimationFrame;
@@ -650,7 +652,7 @@ VisualEvent.prototype = {
       QoSType = "continuous";
       TypeReason = "[CSSTransition]";
       addQoSAnnotation(QoSType, TypeReason);
-      // TODO: remove the transitioned listener
+      // remove the transitionend listener
       node.removeEventListener("transitionend");
     }, true);
   },

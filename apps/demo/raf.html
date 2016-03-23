@@ -1,0 +1,72 @@
+
+<!doctype html>
+<html>
+  <head>
+    <title>Simple Animations Using requestAnimationFrame</title>
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script>
+
+// From: http://www.sitepoint.com/simple-animations-using-requestanimationframe/
+// Support: dmitrilau AT gmail DOT com
+
+function animate(list) {
+  var item,
+      duration,
+      end = 0;
+  var step = function() {
+    var current = +new Date(),
+        remaining = end - current;
+    if(remaining < 60) {
+      if(item) item.run(1);  //1 = progress is at 100%
+      item = list.shift();  //get the next item
+      if(item) {
+        duration = item.time*1000;
+        end = current + duration;
+        item.run(0);  //0 = progress is at 0%
+      } else {
+        return;
+      }
+    } else {
+      var rate = remaining/duration;
+      rate = 1 - Math.pow(rate, 3);  //easing formula
+      item.run(rate);
+    }
+    requestAnimationFrame(step);
+  };
+  step();
+}
+
+function runDemo() {
+  animate([
+    {
+      time: 2,
+      node: document.getElementById("box"),
+      start: 100,
+      end: 300,
+      run: function(rate) {
+        this.node.style
+          .width = (rate*(this.end - this.start) + this.start) + "px";
+      }
+    }, {
+      time: 2,
+      node: document.getElementById("box"),
+      start: 100,
+      end: 300,
+      run: function(rate) {
+        this.node.style
+          .height = (rate*(this.end - this.start) + this.start) + "px";
+      }
+    }
+  ]);
+}
+
+    </script>
+  </head>
+
+  <body>
+    <p><input id="yuhao" type="button" onclick="runDemo()" value="Run Demo"></p>
+
+    <div id="box" style="background:#f88; width:100px; height:100px"></div>
+  </body>
+</html>
+

@@ -1,0 +1,31 @@
+<html>
+<head>
+<style>
+  div#example {
+      width: 100px;
+      height: 100px;
+      background: red;
+      transition: width 1s;
+  }
+</style>
+<script>
+  function updateTransition() {
+
+    var elem = document.getElementById('example');
+    var style = window.getComputedStyle(elem);
+  }
+  function foo() {
+    document.getElementById('example').addEventListener("transitionend", updateTransition, true);
+    document.getElementById('example').style.width="500px";
+  }
+  function bar() {
+  }
+</script>
+</head>
+
+<body>
+  <p>Click the red box below to see the expansion animation.</p>
+
+  <div id="example" onclick="foo()" onscroll="bar()"></div>
+</body>
+</html>

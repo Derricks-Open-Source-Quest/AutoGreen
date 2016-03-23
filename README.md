@@ -19,7 +19,7 @@ The high-level structure of this repo is as follows:
 ## Installation and Usage
 
 **Installation** AutoGreen works as a browser bookmarklet, which is essentially a piece of JavaScript code that gets injected to the end of a Web application. Install it in following steps:
-* Build the AutoGreen code by `sh ./build.sh`. This will generate AutoGreen code in the `out/` directory. Supply the `c` commandline option (i.e., `sh ./build.sh c`) to compress the JavaScript code in AutoGreen. Supply the `d` option for generating [JSDoc](http://usejsdoc.org/) documentations for AutoGreen. Supply `cd` for doing both.
+* Build the AutoGreen code by `sh ./build.sh`. This will generate AutoGreen code in the `out/` directory. Supply the `c` commandline option (i.e., `sh ./build.sh c`) to compress the JavaScript code in AutoGreen (`npm install uglify-js` if `uglifyjs` is not present). Supply the `d` option for generating [JSDoc](http://usejsdoc.org/) documentations for AutoGreen (`npm install jsdoc` if `jsdoc` is not present). Supply `cd` for doing both.
 * Host AutoGreen in a HTTPS server because most browsers do not allow injecting code from the local file system to a webpage. The repo checkout contains a simple python-based HTTPS server. To use that simply run `python simple-https-server.py` in the repo directory.
 * Open the bookmarklet generation page `bookmarklet.html` in a Web browser, and drag the *AutoGreen* link to your bookmark bar. For more details take a look at the code in `bookmarklet.html`. Otherwise you are all set!
 

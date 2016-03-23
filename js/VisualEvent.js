@@ -131,6 +131,7 @@ window.VisualEvent = function ()
       '<div id="Event_Label">'+
         '<span class="Event_LabelClose">x</span>'+
         '<span class="Event_LabelHelp">?</span>'+
+        'AutoGreen <span class="Event_LabelBy">by <a href="http://yuhaozhu.com/" target="_blank">Yuhao Zhu</a>.</span>'+
         'Visual Event <span class="Event_LabelBy">by <a href="http://sprymedia.co.uk/" target="_blank">Allan Jardine</a>.</span>'+
         '<span class="Event_LabelEvents"></span> events were found attached to '+
         '<span class="Event_LabelNodes"></span> nodes. '+

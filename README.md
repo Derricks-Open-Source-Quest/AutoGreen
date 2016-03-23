@@ -8,13 +8,13 @@ This is a project from the [Electrical and Computer Engineering Department](http
 
 The high-level structure of this repo is as follows:
 
-* `css/`: The CSS code of the AutoGreen panel
-* `js/`: The JavaScript code of the AutoGreen annotation logic
-* `build.sh`: The script that builds AutoGreen
-* `bookmarklet.html`: The bookmark generation page
-* `simple-https-server.py`: A simple python-based HTTPS server that can be use to host AutoGreen
-* `VisualEvents.README.md`: The original readme file of [Visual Events](https://github.com/DataTables/VisualEvent)
-* `README.md`: This file
+* `css/`: The CSS code of the AutoGreen panel.
+* `js/`: The JavaScript code of the AutoGreen annotation logic.
+* `build.sh`: The script that builds AutoGreen.
+* `bookmarklet.html`: The bookmark generation page.
+* `simple-https-server.py`: A simple python-based HTTPS server that can be use to host AutoGreen.
+* `VisualEvents.README.md`: The original readme file of [Visual Events](https://github.com/DataTables/VisualEvent).
+* `README.md`: This file.
 
 ## Installation and Usage
 

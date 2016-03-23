@@ -358,11 +358,12 @@ VisualEvent.prototype = {
         console.log(that.allAnnotations);
       }
       else if ( e.which === 68 ) { // d
-        if ( this.s.elements === null ) {
+        if ( that.s.elements === null ) {
           console.log("Events not initialized!");
         } else {
-          for ( i=0, iLen=this.s.elements.length ; i<iLen ; i++ ) {
-            this._annotateElement( this.s.elements[i] );
+          console.log("All GreenWeb Annotations:");
+          for ( i=0, iLen=that.s.elements.length ; i<iLen ; i++ ) {
+            that._annotateElement( that.s.elements[i] );
           }
         }
       }
@@ -557,7 +558,115 @@ VisualEvent.prototype = {
     }
 
     for ( var i=0; i<eventNode.listeners.length; i++ ) {
-      this._lightboxCode(e, node, listeners[i]);
+      this._annotateEvent(eventNode.node, eventNode.listeners[i]);
+    }
+  },
+
+  /**
+   * Prepare for event QoS type detection
+   *  @param {object} that VisualEvent object
+   *  @param {event} evt The event that is about to be triggered
+   *  @param {element} node The node with the attached listeners
+   *  @param {object} listener Listener attached to the element
+   *  @private
+   */
+  "_prepareTrigger": function ( that, evt, node, listener ) {
+    function addQoSAnnotation (type, reason) {
+      listener.QoSType = 'QoSType: '+type+' '+reason;
+      $('div#Event_Code_QoSInfo').text(listener.QoSType);
+
+      if (node.id == "")
+        node.id = listener.QoSAnnotationID;
+      listener.QoSAnnotation = node.tagName.toLowerCase() +
+                               "#QoSID-" + node.id + ":QoS { on" +
+                               listener.type + ".Type: " + type + ";}";
+      $('div#Event_Code_QoSAnnotation').text("GreenWeb Annotation: " + listener.QoSAnnotation);
+
+      if (!that.allAnnotations.hasOwnProperty("#QoSID-" + node.id)) {
+        that.allAnnotations["#QoSID-" + node.id] = {};
+      }
+      that.allAnnotations["#QoSID-" + node.id][evt.type] = listener.QoSAnnotation;
+    }
+
+    if (evt.type == "scroll" || evt.type == "touchmove") {
+      QoSType = "continuous";
+      TypeReason = "[scroll]";
+      addQoSAnnotation(QoSType, TypeReason);
+
+      // We must return here!  If we continue execution, the scroll event
+      // will also register an ontransitioned callback, in which case, |node|
+      // will have multiple (exactly the same) ontransitioned callbacks
+      // (which apparently is allowed!) such that when the css transition
+      // finishes (which is asynchronous), multiple callbacks will be
+      // executed, and the QoS info of the scroll event might get overwritten.
+      return;
+    }
+    else if (evt.type == "click" ||
+             evt.type == "keyup" ||
+             evt.type == "touchstart" ||
+             evt.type == "touchend" ||
+             evt.type == "keyup" ||
+             evt.type == "focus") {
+      QoSType = "single";
+      TypeReason = "[default]";
+      addQoSAnnotation(QoSType, TypeReason);
+    }
+
+    // Hijack jQuery .animate()
+    (function(){
+      // Store a reference to the original remove method.
+      var originalAnimateMethod = jQuery.fn.animate;
+      // Define overriding method.
+      jQuery.fn.animate = function(){
+        var QoSType = "continuous";
+        var TypeReason = "[.animate()]"
+        addQoSAnnotation(QoSType, TypeReason);
+
+        // Do not execute the original method, which will cause this overloaded
+        // function to be called, and set QoSType, over and over again, even when
+        // other events are being executed.
+        //originalAnimateMethod.apply( this, arguments );
+      }
+    })();
+
+    // Hijack rAF
+    var originalrAF = requestAnimationFrame;
+    requestAnimationFrame = function(callback){
+      QoSType = "continuous";
+      TypeReason = "[rAF]";
+      addQoSAnnotation(QoSType, TypeReason);
+
+      // Do not execute the original method because it will cause this overloaded
+      // function to be called, and set QoSType, over and over again, even when
+      // other events are being executed.
+      //originalrAF(callback);
+    }
+
+    // Hijack CSS Transition
+    node.addEventListener("transitionend", function () {
+      // This might be wrong because an event on node A might modify style
+      // property of node B, in which case we should register the
+      // transitionend event on node B, rather than A.
+      QoSType = "continuous";
+      TypeReason = "[CSSTransition]";
+      addQoSAnnotation(QoSType, TypeReason);
+      // TODO: remove the transitioned listener
+    }, true);
+  },
+
+  /**
+   * Annotate an event of a give node
+   *  @param {element} node The node with the attached listeners
+   *  @param {object} listener Listener attached to the element
+   *  @private
+   */
+  "_annotateEvent": function ( node, listener )
+  {
+    var evt = this._createEvent( null, listener.type, null );
+    if ( evt !== null ) {
+      this._prepareTrigger(this, evt, node, listener);
+      if (evt.type !== "scroll") // scroll is handled by prepareTrigger
+        node.dispatchEvent(evt);
     }
   },
 
@@ -705,89 +814,6 @@ VisualEvent.prototype = {
   {
     var that = this;
 
-    function prepareTrigger(evt) {
-      function addQoSAnnotation (type, reason) {
-        listener.QoSType = 'QoSType: '+type+' '+reason;
-        $('div#Event_Code_QoSInfo').text(listener.QoSType);
-
-        if (node.id == "")
-          node.id = listener.QoSAnnotationID;
-        listener.QoSAnnotation = node.tagName.toLowerCase() +
-                                 "#QoSID-" + node.id + ":QoS { on" +
-                                 listener.type + ".Type: " + type + ";}";
-        $('div#Event_Code_QoSAnnotation').text("GreenWeb Annotation: " + listener.QoSAnnotation);
-
-        if (!that.allAnnotations.hasOwnProperty("#QoSID-" + node.id)) {
-          that.allAnnotations["#QoSID-" + node.id] = {};
-        }
-        that.allAnnotations["#QoSID-" + node.id][evt.type] = listener.QoSAnnotation;
-      }
-
-      if (evt.type == "scroll" || evt.type == "touchmove") {
-        QoSType = "continuous";
-        TypeReason = "[scroll]";
-        addQoSAnnotation(QoSType, TypeReason);
-
-	// We must return here!  If we continue execution, the scroll event
-	// will also register an ontransitioned callback, in which case, |node|
-	// will have multiple (exactly the same) ontransitioned callbacks
-	// (which apparently is allowed!) such that when the css transition
-	// finishes (which is asynchronous), multiple callbacks will be
-	// executed, and the QoS info of the scroll event might get overwritten.
-        return;
-      }
-      else if (evt.type == "click" ||
-               evt.type == "keyup" ||
-               evt.type == "touchstart" ||
-               evt.type == "touchend" ||
-               evt.type == "keyup" ||
-               evt.type == "focus") {
-        QoSType = "single";
-        TypeReason = "[default]";
-        addQoSAnnotation(QoSType, TypeReason);
-      }
-
-      // Hijack jQuery .animate()
-      (function(){
-        // Store a reference to the original remove method.
-        var originalAnimateMethod = jQuery.fn.animate;
-        // Define overriding method.
-        jQuery.fn.animate = function(){
-          var QoSType = "continuous";
-          var TypeReason = "[.animate()]"
-          addQoSAnnotation(QoSType, TypeReason);
-
-          // Do not execute the original method, which will cause this overloaded
-          // function to be called, and set QoSType, over and over again, even when
-          // other events are being executed.
-          //originalAnimateMethod.apply( this, arguments );
-        }
-      })();
-
-      // Hijack rAF
-      var originalrAF = requestAnimationFrame;
-      requestAnimationFrame = function(callback){
-        QoSType = "continuous";
-        TypeReason = "[rAF]";
-        addQoSAnnotation(QoSType, TypeReason);
-
-        // Do not execute the original method, which will cause this overloaded
-        // function to be called, and set QoSType, over and over again, even when
-        // other events are being executed.
-        //originalrAF(callback);
-      }
-
-      // Hijack CSS Transition
-      node.addEventListener("transitionend", function () {
-        // This might be wrong because an event on node A might modify style
-        // property of node B, in which case we should register the
-        // transitionend event on node B, rather than A.
-        QoSType = "continuous";
-        TypeReason = "[CSSTransition]";
-        addQoSAnnotation(QoSType, TypeReason);
-      }, true);
-    }
-
     return function () {
       $('li', this.parentNode).removeClass( 'Event_EventSelected' );
       $(this).addClass( 'Event_EventSelected' );
@@ -795,7 +821,7 @@ VisualEvent.prototype = {
       var evt = that._createEvent( e, listener.type, e.target );
       that._renderCode( e, listener.func, listener.source, listener.type,
         evt===null ? null : function() {
-          prepareTrigger(evt);
+          that._prepareTrigger(that, evt, node, listener);
           if (evt.type !== "scroll") // scroll is handled by prepareTrigger
             node.dispatchEvent(evt);
 
@@ -1017,9 +1043,12 @@ VisualEvent.prototype = {
       switch ( typeGroup ) {
         case 'mouse':
           evt = document.createEvent( "MouseEvents" );
-          evt.initMouseEvent( type, true, true, window, 0, offset.left, offset.top,
-            offset.left, offset.top, originalEvt.ctrlKey, originalEvt.altKey, originalEvt.shiftKey,
-            originalEvt.metaKey, originalEvt.button, null );
+          evt.initMouseEvent( type, true, true, window, 0, null, null,
+            null, null, false, false, false,
+            false, 0, null );
+          //evt.initMouseEvent( type, true, true, window, 0, offset.left, offset.top,
+          //  offset.left, offset.top, originalEvt.ctrlKey, originalEvt.altKey, originalEvt.shiftKey,
+          //  originalEvt.metaKey, originalEvt.button, null );
           break;
 
         case 'html':

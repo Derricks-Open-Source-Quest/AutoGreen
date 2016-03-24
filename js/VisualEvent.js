@@ -460,6 +460,8 @@ VisualEvent.prototype = {
       "type": "GET",
       "url": url,
       "success": function (text) {
+        if ( text === undefined )
+          text = "unknown script";
         that.s.scripts.push( {
           "src": url,
           "code": text

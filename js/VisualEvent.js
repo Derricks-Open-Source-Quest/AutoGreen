@@ -580,19 +580,22 @@ VisualEvent.prototype = {
    *  @param {event} evt The event that is about to be triggered
    *  @param {element} node The node with the attached listeners
    *  @param {object} listener Listener attached to the element
+   *  @param {bool} mode Manual ("manual") or automatic ("auto") annotation
    *  @private
    */
-  "_prepareTrigger": function ( that, evt, node, listener ) {
-    function addQoSAnnotation (type, reason) {
-      listener.QoSType = 'QoSType: '+type+' '+reason;
-      $('div#Event_Code_QoSInfo').text(listener.QoSType);
+  "_prepareTrigger": function ( that, evt, node, listener, mode ) {
+    function addQoSAnnotation (type, reason, mode) {
 
-      if (node.id == "")
-        node.id = listener.QoSAnnotationID;
+      listener.QoSType = 'QoSType: '+type+' '+reason;
+      node.id = node.id === "" ? listener.QoSAnnotationID : node.id;
       listener.QoSAnnotation = node.tagName.toLowerCase() +
-                               "#QoSID-" + node.id + ":QoS { on" +
-                               listener.type + ".Type: " + type + ";}";
-      $('div#Event_Code_QoSAnnotation').text("GreenWeb Annotation: " + listener.QoSAnnotation);
+                               "#QoSID-" + node.id +
+                               ":QoS { on" + listener.type + ".Type: " + type + ";}";
+
+      if ( mode === "manual" ) {
+        $('div#Event_Code_QoSInfo').text(listener.QoSType);
+        $('div#Event_Code_QoSAnnotation').text("GreenWeb Annotation: " + listener.QoSAnnotation);
+      }
 
       if (!that.allAnnotations.hasOwnProperty("#QoSID-" + node.id)) {
         that.allAnnotations["#QoSID-" + node.id] = {};
@@ -605,7 +608,7 @@ VisualEvent.prototype = {
     if (evt.type == "scroll" || evt.type == "touchmove") {
       QoSType = "continuous";
       TypeReason = "[scroll]";
-      addQoSAnnotation(QoSType, TypeReason);
+      addQoSAnnotation(QoSType, TypeReason, mode);
 
       // We must return here!  If we continue execution, the scroll event
       // will also register an ontransitioned callback, in which case, |node|
@@ -623,7 +626,7 @@ VisualEvent.prototype = {
              evt.type == "focus") {
       QoSType = "single";
       TypeReason = "[default]";
-      addQoSAnnotation(QoSType, TypeReason);
+      addQoSAnnotation(QoSType, TypeReason, mode);
     }
 
     // Hijack jQuery .animate()
@@ -635,7 +638,7 @@ VisualEvent.prototype = {
       //var TypeReason = "[.animate()]"
       QoSType = "continuous";
       TypeReason = "[.animate()]"
-      addQoSAnnotation(QoSType, TypeReason);
+      addQoSAnnotation(QoSType, TypeReason, mode);
 
       // Do not execute the original method, which will cause this overloaded
       // function to be called, and set QoSType, over and over again, even when
@@ -648,7 +651,7 @@ VisualEvent.prototype = {
     requestAnimationFrame = function(callback){
       QoSType = "continuous";
       TypeReason = "[rAF]";
-      addQoSAnnotation(QoSType, TypeReason);
+      addQoSAnnotation(QoSType, TypeReason, mode);
 
       // Do not execute the original method because it will cause this overloaded
       // function to be called, and set QoSType, over and over again, even when
@@ -663,7 +666,7 @@ VisualEvent.prototype = {
       // transitionend event on node B, rather than A.
       QoSType = "continuous";
       TypeReason = "[CSSTransition]";
-      addQoSAnnotation(QoSType, TypeReason);
+      addQoSAnnotation(QoSType, TypeReason, mode);
       // remove the transitionend listener
       node.removeEventListener("transitionend");
     }, true);
@@ -679,7 +682,7 @@ VisualEvent.prototype = {
   {
     var evt = this._createEvent( null, listener.type, null );
     if ( evt !== null ) {
-      this._prepareTrigger(this, evt, node, listener);
+      this._prepareTrigger(this, evt, node, listener, "auto");
       if (evt.type !== "scroll") // scroll is handled by prepareTrigger
         node.dispatchEvent(evt);
     }
@@ -836,7 +839,7 @@ VisualEvent.prototype = {
       var evt = that._createEvent( e, listener.type, e.target );
       that._renderCode( e, listener.func, listener.source, listener.type,
         evt===null ? null : function() {
-          that._prepareTrigger(that, evt, node, listener);
+          that._prepareTrigger(that, evt, node, listener, "manual");
           if (evt.type !== "scroll") // scroll is handled by prepareTrigger
             node.dispatchEvent(evt);
 

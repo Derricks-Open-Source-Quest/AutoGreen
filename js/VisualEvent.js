@@ -172,36 +172,31 @@ window.VisualEvent = function ()
     "help": $(
       '<div id="Event_Help">'+
         '<div class="Event_HelpInner">'+
-          '<h1>Visual Event help</h1>'+
-          '<p>Visual Event will show which elements on any given page have Javascript events attached '+
-            'to them, what those events are and the code associated with the events. In Webkit '+
-            'browsers and Opera, Visual Event will also indicate where the code in question was '+
-            'defined.</p>'+
-          '<p>Note that Visual Event is only able to show events for Javascript libraries for which '+
-            'it has a parser. This is currently: DOM0 events, Glow, jQuery, MooTools, Prototype and YUI2.</p>'+
+          '<h1>AutoGreen Help</h1>'+
+          '<p>AutoGreen automatically applies GreenWeb annotations to DOM events to '+
+            'enable energy-efficiency optimizations at runtime. '+
+            'AutoGreen relies on <a href="https://github.com/DataTables/VisualEvent" target="_blank">Visual Event</a> '+
+            'to detect DOM events and inherits most of Visual Event\'s commands. See the '+
+            '<a href="https://github.com/yuhao/AutoGreen">Github repository</a> for more information.</p>'+
           '<p>Commands:</p>'+
-          '<table cellpadding="0" cellspacing="0" border="0">'+
-            '<tr>'+
-              '<td>Double click element with event</td>'+
-              '<td>Hide event indicator. Allows access to nodes underneath</td>'+
-            '</tr>'+
-            '<tr>'+
-              '<td>Key: space</td>'+
-              '<td>Restore all events to be visible</td>'+
-            '</tr>'+
-            '<tr>'+
-              '<td>Key: esc</td>'+
-              '<td>Quit out of Visual Event</td>'+
-            '</tr>'+
-            '<tr>'+
-              '<td>Key: h</td>'+
-              '<td>Show / hide this help box</td>'+
-            '</tr>'+
-            '<tr>'+
-              '<td>Key: r</td>'+
-              '<td>Reload and display events on page</td>'+
-            '</tr>'+
-          '</table>'+
+          '<ul>'+
+            '<li>Hover mouse over an element: '+
+              'Display the AutoGreen box with detailed event information.</li>'+
+            '<li>Double click an element: '+
+              'Hide event indicator. Allows access to nodes underneath</li>'+
+            '<li>Key space: '+
+              'Restore all events to be visible.</li>'+
+            '<li>Key esc: '+
+              'Quit out of Visual Event.</li>'+
+            '<li>Key h: '+
+              'Show / hide this help box.</li>'+
+            '<li>Key r: '+
+              'Reload and display events on page.</li>'+
+            '<li>Key q: '+
+              'Dump GreenWeb annotations manually identified so far to the console.</li>'+
+            '<li>Key d: '+
+              'Automatically annotate all DOM events and dump the annotations to the console.</li>'+
+          '</ul>'+
           '<p>The colour of the elements that have been detected to have an event reflect the type of '+
           'events that are attached to the element:</p>'+
           '<table cellpadding="0" cellspacing="0" border="0" class="Event_LabelColorInfo">'+
@@ -224,9 +219,12 @@ window.VisualEvent = function ()
               '<td>Mouse + HTML + UI</td>'+
             '</tr>'+
           '</table>'+
-          '<p>Visual Event is open source software (GPLv2). If you would like to contribute an '+
-            'enhancement, please fork the project on '+
-            '<a href="https://github.com/DataTables/VisualEvent" target="_blank">Github</a>!</p>'+
+          '<p>AutoGreen is open source software (GPLv2). Fork the project on '+
+            '<a href="https://github.com/yuhao/AutoGreen" target="_blank">Github</a> and start making the '+
+            'Web GREAT again!</p>'+
+          '<p>Visual Event is also an open source software (GPLv2). If you would like to contribute an '+
+            'enhancement to Visual Event, fork the project '+
+            '<a href="https://github.com/DataTables/VisualEvent" target="_blank">here</a>!</p>'+
           '<p class="Event_HelpClose">Click anywhere to close this help box.</p>'+
         '</div>'+
       '</div>')[0],

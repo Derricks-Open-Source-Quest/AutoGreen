@@ -65,3 +65,9 @@ As a proof-of-concept prototype, our current implementation does not yet support
 AutoGreen (and GreenWeb) is developed by [Yuhao Zhu](http://yuhaozhu.com/) at UT Austin. The project is advised by [Vijay Janapa Reddi](http://3nity.io/~vj/).
 
 AutoGreen owes a great debt of gratitude to [Visual Event](https://github.com/DataTables/VisualEvent) and its author [Allan Jardine](http://sprymedia.co.uk/about).
+
+## License
+
+AutoGreen is under the [GPL v2 license](http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html). In short, this means AutoGreen is free software that can be redistributed and modified in any way, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+The GPL v2 license does NOT require the modified version to be released. But if one releases the modified version to the public in some way, the GPL requires you to make the modified source code available under the GPL.

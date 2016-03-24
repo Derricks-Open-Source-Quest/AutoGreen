@@ -563,6 +563,12 @@ VisualEvent.prototype = {
       return;
     }
 
+    // Do not annotate nodes with an anchor parent
+    var pANode = $(eventNode.node).parents("a");
+    if ( pANode[0] !== undefined ) {
+      return;
+    }
+
     for ( var i=0; i<eventNode.listeners.length; i++ ) {
       this._annotateEvent(eventNode.node, eventNode.listeners[i]);
     }

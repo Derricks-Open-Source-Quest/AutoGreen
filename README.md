@@ -26,8 +26,12 @@ The high-level structure of this repo is as follows:
 
 **Usage** Navigate to the Web application (webpage) that you want to apply GreenWeb annotations to.
 * Click *AutoGreen* on your browser bookmarklet bar. DOM nodes with JavaScript events will be highlighted.
-* Move the mouse over any highlighted DOM node to display the AutoGreen panel which shows further event details. GreenWeb annotation information (at the bottom of the panel) is "Unknown" at this point.
-* Click "trigger event" link on the AutoGreen panel to dispatch the selected event. After the event finishes execution, AutoGreen will automatically update the GreenWeb annotations.
+* To annotate an event of a DOM node manually:
+  * Move the mouse over any highlighted DOM node to display the AutoGreen box which shows further event details. GreenWeb annotation information (at the bottom of the box) is "Unknown" at this point.
+  * Click "trigger event" link on the AutoGreen panel to dispatch the selected event. After the event finishes execution, AutoGreen will automatically update the GreenWeb annotations in the box.
+  * Type `q` and all the annotations so far will be dumped to the console.
+* To annotate all events of all DOM nodes automatically:
+  * Type `d` and all the GreenWeb annotations that AutoGreen identifies will be dumped to the console.
 
 ## How AutoGreen Works
 

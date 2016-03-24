@@ -558,8 +558,12 @@ VisualEvent.prototype = {
       return;
     }
 
+    // Do not annotate anchor node
+    if ( eventNode.node.tagName === "A" ) {
+      return;
+    }
+
     for ( var i=0; i<eventNode.listeners.length; i++ ) {
-      //TODO: do not annotate nodes that are just anchor links
       this._annotateEvent(eventNode.node, eventNode.listeners[i]);
     }
   },

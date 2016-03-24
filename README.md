@@ -13,7 +13,7 @@ The high-level structure of this repo is as follows:
 * `build.sh`: The script that builds AutoGreen.
 * `bookmarklet.html`: The bookmark generation page.
 * `simple-https-server.py`: A simple python-based HTTPS server that can be use to host AutoGreen.
-* `VisualEvents.README.md`: The original readme file of [Visual Events](https://github.com/DataTables/VisualEvent).
+* `VisualEvents.README.md`: The original readme file of [Visual Event](https://github.com/DataTables/VisualEvent).
 * `README.md`: This file.
 
 ## Installation and Usage
@@ -51,7 +51,7 @@ GreenWeb is designed as extensions to existing CSS language. Intuitively, each G
 
 AutoGreen mainly consists of two phases. The first phase is to detect the JavaScript events associated with all DOM nodes in a Web application. The second phase is to detect the QoS information of each event.
 
-For the event detection phase, AutoGreen owes a great debt of gratitude to <a href="https://github.com/DataTables/VisualEvent">Visual Events</a>, which automatically identifies the details of all JavaScript events associated with all DOM elements on a Web application (webpage). In fact, AutoGreen started as a fork of Visual Events. Take a look at Visual Events' [readme](VisualEvents.README.md) for more details of the event detection phase.
+For the event detection phase, AutoGreen owes a great debt of gratitude to <a href="https://github.com/DataTables/VisualEvent">Visual Event</a>, which automatically identifies the details of all JavaScript events associated with all DOM elements on a Web application (webpage). In fact, AutoGreen started as a fork of Visual Event. Take a look at Visual Event's [readme](VisualEvents.README.md) for more details of the event detection phase.
 
 For the QoS detection phase, AutoGreen performs a profiling run of each event by explicitly triggering its callback function. During the callback execution, AutoGreen checks for certain conditions to determine an event’s QoS type as follows. An event’s QoS type is set to “continuous” if its callback function triggers a jQuery `animate()` function, a `rAF`, or a CSS transition/animation. Otherwise the QoS type is set to “single.”
 * To detect `animate()` and `rAF`, we overload their original functions and check in the overloaded function.
@@ -63,4 +63,4 @@ As a proof-of-concept prototype, our current implementation does not yet support
 
 AutoGreen (and GreenWeb) is developed by [Yuhao Zhu](http://yuhaozhu.com/) at UT Austin. The project is advised by [Vijay Janapa Reddi](http://3nity.io/~vj/).
 
-AutoGreen owes a great debt of gratitude to [Visual Events](https://github.com/DataTables/VisualEvent) and its author [Allan Jardine](http://sprymedia.co.uk/about).
+AutoGreen owes a great debt of gratitude to [Visual Event](https://github.com/DataTables/VisualEvent) and its author [Allan Jardine](http://sprymedia.co.uk/about).

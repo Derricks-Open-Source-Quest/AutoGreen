@@ -668,7 +668,7 @@ VisualEvent.prototype = {
       TypeReason = "[CSSTransition]";
       addQoSAnnotation(QoSType, TypeReason, mode);
       // remove the transitionend listener
-      node.removeEventListener("transitionend");
+      node.removeEventListener("transitionend", this);
     }, true);
   },
 

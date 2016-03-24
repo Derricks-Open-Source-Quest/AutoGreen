@@ -363,6 +363,9 @@ VisualEvent.prototype = {
           for ( i=0, iLen=that.s.elements.length ; i<iLen ; i++ ) {
             that._annotateElement( that.s.elements[i] );
           }
+          // TODO: this might not be true because events are async and
+          // might not finish at this point. Need to have some sort of
+          // queue to host all outstanding events.
           console.log(that.allAnnotations);
         }
       }
@@ -553,7 +556,7 @@ VisualEvent.prototype = {
    */
   "_annotateElement": function ( eventNode )
   {
-    // Element is hidden
+    // Do not annotate hidden elements
     if ( $(eventNode.node).filter(':visible').length === 0 ) {
       return;
     }

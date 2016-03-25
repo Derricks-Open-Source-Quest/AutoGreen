@@ -21,11 +21,16 @@
 <p>First Paragraph</p>
 <p>Second Paragraph</p>
 <p>Yet one more Paragraph</p>
+<a href="https://www.google.com/"><div onclick="foo()">Google</div></a>
  
 <script>
 $( "p" ).on('touchend', function(e) {
   $( this ).slideUp();
 });
+
+function foo() {
+  console.log("clicked");
+}
 
 </script>
   </body>

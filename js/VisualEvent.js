@@ -679,16 +679,18 @@ VisualEvent.prototype = {
     }
 
     // Hijack CSS Transition
-    node.addEventListener("transitionend", function () {
-      // This might be wrong because an event on node A might modify style
-      // property of node B, in which case we should register the
-      // transitionend event on node B, rather than A.
-      QoSType = "continuous";
-      TypeReason = "[CSSTransition]";
-      addQoSAnnotation(QoSType, TypeReason, mode);
-      // remove the transitionend listener
-      node.removeEventListener("transitionend", this);
-    }, true);
+    // Add an css transitionend listener to ALL the DOM nodes.
+    //   This is needed because an event on node A might modify style
+    //   property of node B -- only listening to node A's css transitionend
+    //   is not sufficient.
+    var allNodes = document.getElementsByTagName("*");
+    for ( var i = 0; i < allNodes.length; i++ ) {
+      allNodes[i].addEventListener("transitionend", function () {
+        QoSType = "continuous";
+        TypeReason = "[CSSTransition]";
+        addQoSAnnotation(QoSType, TypeReason, mode);
+      }, true);
+    }
   },
 
   /**

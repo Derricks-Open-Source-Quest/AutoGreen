@@ -9,13 +9,7 @@
   }
 </style>
 <script>
-  function updateTransition() {
-
-    var elem = document.getElementById('example');
-    var style = window.getComputedStyle(elem);
-  }
   function foo() {
-    document.getElementById('example').addEventListener("transitionend", updateTransition, true);
     document.getElementById('example').style.width="500px";
   }
   function bar() {
@@ -26,6 +20,8 @@
 <body>
   <p>Click the red box below to see the expansion animation.</p>
 
-  <div id="example" onclick="foo()" onscroll="bar()"></div>
+  <div id="example"></div>
+  <br>
+  <button onclick="foo()" onscroll="bar()">Animation</button>
 </body>
 </html>

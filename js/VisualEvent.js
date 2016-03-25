@@ -246,6 +246,10 @@ window.VisualEvent = function ()
 };
 
 
+/**
+ * VisualEvent class prototype
+ * @namespace prototype
+ */
 VisualEvent.prototype = {
   /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * API methods
@@ -253,6 +257,7 @@ VisualEvent.prototype = {
 
   /**
    * Shutdown Visual Event and return to the original page
+   * @memberof prototype
    * @param {event} e Event object
    */
   "close": function ( e )
@@ -277,6 +282,7 @@ VisualEvent.prototype = {
   /**
    * Reinitialise Visual Event (i.e. bring it up-to-date with any new events which might have
    *   been added
+   * @memberof prototype
    */
   "reInit": function ()
   {
@@ -302,6 +308,7 @@ VisualEvent.prototype = {
 
   /**
    * Visual Event constructor
+   * @memberof prototype
    *  @private
    */
   "_construct": function ()
@@ -390,6 +397,7 @@ VisualEvent.prototype = {
 
   /**
    * Show the help box
+   * @memberof prototype
    *  @private
    */
   "_help": function () {
@@ -399,6 +407,7 @@ VisualEvent.prototype = {
 
   /**
    * Hide hte help box
+   * @memberof prototype
    *  @private
    */
   "_hideHelp": function () {
@@ -414,6 +423,7 @@ VisualEvent.prototype = {
   /**
    * Parse the DOM for script tags and store the Javascript that is found. For any scripts which
    * have a 'src' attribute, add them to a queue for Ajax loading and then start the queue running
+   * @memberof prototype
    *  @private
    */
   "_scriptsLoad": function ()
@@ -446,6 +456,8 @@ VisualEvent.prototype = {
   /**
    * Pull an item off the script loading queue and load it up by an Ajax return. When done, loop
    * back and load the next item off the queue, until all done.
+   * @memberof prototype
+   *  @param {array} loadQueue The queue containing all the outstanding scripts to be received
    *  @private
    */
   "_scriptLoadQueue": function ( loadQueue )
@@ -481,6 +493,7 @@ VisualEvent.prototype = {
   /**
    * Attempt to find the source location (file and line number) for a given function and
    * format a return string which is human readable explaining where the source might come from
+   * @memberof prototype
    *  @param {string} func The function string to search for
    *  @returns {string} Formatted string with information about the source
    *  @private
@@ -533,6 +546,7 @@ VisualEvent.prototype = {
 
   /**
    * Get the name of a file from a URL (i.e. the last part in a slash seperated string)
+   * @memberof prototype
    *  @param {string} src URL to get the file name from
    *  @returns {string} File name
    *  @private
@@ -550,6 +564,7 @@ VisualEvent.prototype = {
 
   /**
    * Annotate a node that has at least one event subscribed to it
+   * @memberof prototype
    *  @param {object} eventNode Event information for this node in the same format as 
    *    VisualEvent.s.elements objects
    *  @private
@@ -579,6 +594,7 @@ VisualEvent.prototype = {
 
   /**
    * Prepare for event QoS type detection
+   * @memberof prototype
    *  @param {object} that VisualEvent object
    *  @param {event} evt The event that is about to be triggered
    *  @param {element} node The node with the attached listeners
@@ -677,6 +693,7 @@ VisualEvent.prototype = {
 
   /**
    * Annotate an event of a give node
+   * @memberof prototype
    *  @param {element} node The node with the attached listeners
    *  @param {object} listener Listener attached to the element
    *  @private
@@ -698,6 +715,7 @@ VisualEvent.prototype = {
   /**
    * Build the list of nodes that have events attached to them by going through all installed
    * parsers
+   * @memberof prototype
    *  @returns {array} List of nodes with their associated events
    *  @private
    */
@@ -732,6 +750,7 @@ VisualEvent.prototype = {
 
   /**
    * A node has at least one event subscribed to it - draw it visually
+   * @memberof prototype
    *  @param {object} eventNode Event information for this node in the same format as 
    *    VisualEvent.s.elements objects
    *  @private
@@ -792,6 +811,7 @@ VisualEvent.prototype = {
   /**
    * Show the list of event types which are attached to this node and add event listeners to show
    * the code when required (mouseover on the list)
+   * @memberof prototype
    *  @param {event} e The mouse event that triggered this display
    *  @param {element} node The node with the attached listeners
    *  @param {array} listeners List of listeners attached to the element
@@ -825,6 +845,7 @@ VisualEvent.prototype = {
   /**
    * Create a function which will build the HTML needed for the display of the code for an
    * event handler
+   * @memberof prototype
    *  @param {event} e Original mouse event that triggered the lightbox to be shown
    *  @param {element} node The node with the attached listeners
    *  @param {object} listener Listener attached to the element
@@ -860,6 +881,7 @@ VisualEvent.prototype = {
 
   /**
    * Position the lightbox relative to the element which has an event attached to it
+   * @memberof prototype
    *  @param {element} target The lightbox node to move (note there is only one this.dom.lightbox
    *    but this keeps it nice and generic!)
    *  @param {element} parent The element with the event attached to it
@@ -902,6 +924,7 @@ VisualEvent.prototype = {
   /**
    * Close the lightbox - use a cancellable timer for the hiding of the lightbox, so we can move 
    * the mouse from element to element without having it flicker.
+   * @memberof prototype
    *  @private
    */
   "_lightboxHide": function ()
@@ -921,6 +944,7 @@ VisualEvent.prototype = {
 
   /**
    * Display a tooltip with event information for a particular event handler
+   * @memberof prototype
    *  @param {event} e Target node information
    *  @param {function} func The function string
    *  @param {string} type Event type
@@ -984,6 +1008,7 @@ VisualEvent.prototype = {
   /**
    * Show information about a particular node - the node name, ID and class (if it has either/both
    * of the last two)
+   * @memberof prototype
    *  @param {element} node The element to inspect
    *  @returns {string} Information about the element
    *  @private
@@ -1009,6 +1034,7 @@ VisualEvent.prototype = {
   /**
    * Display the Visual Event toolbar, writing in the required information and adding the event
    * handlers as needed
+   * @memberof prototype
    *  @private
    */
   "_renderLabel": function ()
@@ -1046,6 +1072,7 @@ VisualEvent.prototype = {
 
   /**
    * Create an event oject based on the type to trigger an event - cross-platform
+   * @memberof prototype
    *  @param {event} originalEvt The original event (click) which caused this function to run
    *  @param {string} type Type of event
    *  @param {node} target Target node of the event
@@ -1116,6 +1143,7 @@ VisualEvent.prototype = {
 
   /**
    * Cancel tooltip mouse timer
+   * @memberof prototype
    *  @param {event} e Mouse event
    *  @private
    */
@@ -1130,6 +1158,7 @@ VisualEvent.prototype = {
 
   /**
    * Combine the main events array, so that each node only has one element
+   * @memberof prototype
    *  @param {array} main The main source array
    *  @returns {array} Augmented internal representation
    *  @private
@@ -1165,6 +1194,7 @@ VisualEvent.prototype = {
    *   array entries:
    *     { node: '', source: '', func: '', type: '', removed: bool }
    *     { node: '', source: '', listeners: [ func: '', type: '', removed: bool, ... ] }
+   * @memberof prototype
    *  @param {array} main The main source array
    *  @param {array} api The API array
    *  @returns {array} Augmented internal representation
@@ -1233,6 +1263,7 @@ VisualEvent.prototype = {
 
   /**
    * Group the event types as per w3c groupings
+   * @memberof prototype
    *  @param {string} type Event type
    *  @returns {string} Event grouping
    *  @private
@@ -1278,6 +1309,7 @@ VisualEvent.prototype = {
 
   /**
    * Compute the background colour of the event indicator from the event types
+   * @memberof prototype
    *  @param {array} events Events information
    *  @returns {string} Color
    *  @private

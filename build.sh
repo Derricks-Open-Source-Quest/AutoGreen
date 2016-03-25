@@ -75,7 +75,7 @@ cat "$CSS/VisualEvent.css" "$CSS/shCore.css" > "$BUILD_CSS/VisualEvent.css"
 # Docs
 if [ -e $JSDOC3 -a "$MODE" == "d" -o "$MODE" == "cd" ]; then
   echo "  Generating JSDoc"
-  $JSDOC3 -d $BUILD_DOCS $JS/VisualEvent.js $JS/VisualEvent_Loader.js
+  $JSDOC3 -d $BUILD_DOCS -p $JS/VisualEvent.js $JS/VisualEvent_Loader.js
 fi
 
 echo "Done"

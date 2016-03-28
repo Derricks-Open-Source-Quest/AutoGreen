@@ -1,6 +1,6 @@
 # AutoGreen
 
-AutoGreen is a system that automatically annotates (mobile) Web applications to enable energy-efficiency optimizations by the Web runtime. The annotations are called GreenWeb, which are Web language extensions that allow Web developers to express user QoS expectations at an abstract level. Based on programmer-guided QoS information the Web runtime dynamically determines how to deliver the target QoS experience while minimizing the energy consumption.
+AutoGreen is a system that automatically annotates (mobile) Web applications to enable energy-efficiency optimizations by the Web runtime. The annotations are called [GreenWeb](GreenWeb.md), which are Web language extensions that allow Web developers to express user QoS expectations at an abstract level. Based on programmer-guided QoS information the Web runtime dynamically determines how to deliver the target QoS experience while minimizing the energy consumption.
 
 This is a project from the [Electrical and Computer Engineering Department](http://www.ece.utexas.edu/) at [The University of Texas at Austin](http://www.utexas.edu/). See the contributors and acknowledgement at the end for more information.
 
@@ -38,7 +38,7 @@ The high-level structure of this repo is as follows:
 
 #### A Brief Introduction of GreenWeb Language Extensions
 
-AutoGreen is a system that automatically annotates Web applications with GreenWeb language extensions. Here we provide a brief overview of GreenWeb. More details can be found in this paper.
+AutoGreen is a system that automatically annotates Web applications with GreenWeb language extensions. Here we provide a brief overview of GreenWeb. More details can be found in this paper. The GreenWeb [readme](GreenWeb.md) file contained in this repo provides instructions on how to patch the Chromium browser to support the Greenweb language extensions.
 
 GreenWeb let developers specify two critical aspects of end-user QoS experience in mobile Web applications: QoS type and QoS target. Intuitively, QoS type characterizes whether users perceive QoS experience by interaction responsiveness or animation smoothness, and QoS target denotes the performance level that is required to deliver a desirable user experience for a specific QoS type.
 

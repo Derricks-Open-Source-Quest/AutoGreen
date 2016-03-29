@@ -38,11 +38,11 @@ The high-level structure of this repo is as follows:
 
 #### GreenWeb Language Extensions
 
-AutoGreen is a system that automatically annotates Web applications with GreenWeb language extensions. The GreenWeb [readme](GreenWeb.md) file provides a brief introduction to the syntax and sementics of the GreenWeb language extensions. It also describes instructions on how to patch the Chromium browser to support the Greenweb language extensions.
+AutoGreen is a system that automatically annotates Web applications with GreenWeb language extensions. The GreenWeb [readme](GreenWeb.md) provides a brief introduction to the syntax and sementics of the GreenWeb language extensions. It also describes instructions on how to patch the Chromium browser to support the Greenweb language extensions. Understanding AutoGreen requires some basic knowledge of GreenWeb so we encourage you to take a look at GreenWeb first.
 
 #### How AutoGreen Applies GreenWeb Annotations
 
-AutoGreen mainly consists of two phases. The first phase is to detect the JavaScript events associated with all DOM nodes in a Web application. The second phase is to detect the QoS information of each event.
+AutoGreen mainly consists of two phases. The first phase is to detect the JavaScript events associated with all DOM nodes in a Web application. The second phase is to detect, and annotate, the QoS information of each event.
 
 For the event detection phase, AutoGreen owes a great debt of gratitude to <a href="https://github.com/DataTables/VisualEvent">Visual Event</a>, which automatically identifies the details of all JavaScript events associated with all DOM elements on a Web application (webpage). In fact, AutoGreen started as a fork of Visual Event. Take a look at Visual Event's [readme](VisualEvents.README.md) for more details of the event detection phase.
 

@@ -1,6 +1,8 @@
 # GreenWeb
 
-**TL; DR**: GreenWeb is a set of Web language extensions (defined as CSS rules) that guide the Web browser runtime to perform energy-efficiency optimizations. One needs to patch the browser to support it. As a proof of concept we have only Chromium support for now. The Chromium patch is at: https://codereview.chromium.org/1835303002/.
+##TL; DR##
+
+GreenWeb is a set of Web language extensions (defined as CSS rules) that guide the Web browser runtime to perform energy-efficiency optimizations. One needs to patch the browser to support it. As a proof of concept we have only Chromium support for now. The Chromium patch is at: https://codereview.chromium.org/1835303002/.
 
 This readme file serves three purposes: explains what exactly is Greenweb; describes how to use GreenWeb in a Web application; provides instructions on how to patch Chromium to support GreenWeb.
 

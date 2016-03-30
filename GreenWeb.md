@@ -43,6 +43,10 @@ We add q pseudo-selector `:QoS`, indicating that a rule will be decorating the Q
   * `onevent-vduration` does not apply to `continuous` events. If used together with `onevent-type: continuous`, `onevent-vduration` will be ignored.
   * When specified together with `onevent-vpi` (or `onevent-vpu`), `onevent-vduration` will be ignored and the QoS targets will be set by user specified values.
 
+####Example usage####
+
+We set up a jsfiddle [page](https://jsfiddle.net/rn9twf8c/2/) to showcase how to insert GreenWeb annotations to a webpage.
+
 ##Patch Chromium to Support GreenWeb##
 
 ##Todo##

@@ -15,8 +15,8 @@ Two QoS types exist: single and continuous:
 * The other QoS type is “continuous,” corresponding to interactions whose responses are not one single frame but a sequence of continuous frames. User QoS experience is determined by the latency of each frame in the sequence rather than one specific frame as in the “single” case.
 
 Two types of QoS targets exist: imperceptible target and usable target:
-* Imperceptible target (T<sub>i</sub>) delivers a latency that is imperceptible/instantaneous to users. Achieving a performance higher than T<sub>i</sub> does not add user perceptible value while unnecessarily wasting energy.
-* Usable target (T<sub>u</sub>), in contrast, corresponds to a latency that can barely keep users engaged. Delivering a performance lower than T<sub>u</sub> may cause users to deem an application unusable and even abandon it.
+* Imperceptible target (P<sub>i</sub>) delivers a latency that is imperceptible/instantaneous to users. Achieving a performance higher than P<sub>i</sub> does not add user perceptible value while unnecessarily wasting energy.
+* Usable target (P<sub>u</sub>), in contrast, corresponds to a latency that can barely keep users engaged. Delivering a performance lower than P<sub>u</sub> may cause users to deem an application unusable and even abandon it.
 
 Given the QoS type and target information, the GreenWeb runtime determines how to best deliver the QoS using the minimal energy consumption. As a proof of concept, we demonstrate one particular runtime implementation that leverages the [big/little ACMP architecture](https://en.wikipedia.org/wiki/ARM_big.LITTLE). It is also feasible to build a runtime leveraging only a single big (or little) core capable of DVFS. In addition, one could implement a GreenWeb runtime using pure software-level techniques, such as prioritizing resource loading or using power-conserving colors.
 
@@ -57,3 +57,5 @@ if ($( this ).css("onclick-type") == 'single') {
   $( this ).css("onclick-vpu", "30");
 }
 ```
+
+* We must maintain the following order when the QoS properties are applied: Type --> Duration --> Pi/Pu. This is to make sure that the user specified values overwrite default ones. For that reason, the current implementation has to use the (ugly) names `vpi`, `vpu`, and `vduration` instead of the clean `pi`, `pu`, and `duration` because alphabetically `vpi` comes after `vduration`, which comes after `type`. The CSS style resolution engine of Chromium applies properties in alphabetical order. In the future, it would be ideal to adopt a multi-component CSS property using which we could specify everything in one line: `onevent-qos: type, [duration] | [pi, pu]`.

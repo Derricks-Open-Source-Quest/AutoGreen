@@ -24,8 +24,24 @@ Having said this, the ACMP architecture is already widely adopted in today’s m
 
 ##How to use GreenWeb: Syntax and Semantics##
 
-GreenWeb is designed as extensions to existing CSS language. Intuitively, each GreenWeb rule selects a DOM element `E`, and declares CSS properties to express the QoS type and QoS target information when an event `onevent` is triggered on `E`. For example: `E:QoS{ onevent-type: continuous }` means as soon as `onevent` is triggered on DOM element `E`, the application must continuously optimize for frame latency.
+GreenWeb is designed as extensions to existing CSS language. Intuitively, each GreenWeb rule selects a DOM element `E`, and declares CSS properties to express the QoS type and QoS target information when an event `onevent` is triggered on `E`. For example: `E:QoS{ onevent-type: continuous }` means as soon as `onevent` is triggered on DOM element `E`, the application must continuously optimize for frame latency *while minimizing energy consumption*.
 
+####Supported Events####
+
+GreenWeb primarily targets *mobile* Web applications. Therefore we support common events that can be triggered by fingertap and fingermove on a mobile device: `click`, `touchstart`, `touchend`, `touchmove`, and `click`.
+
+####New Selector####
+
+We add q pseudo-selector `:QoS`, indicating that a rule will be decorating the QoS information of a DOM node.
+
+####New CSS Properties####
+
+* `onevent-type` indicates the QoS type of `onevent` where `event` is one of the five supported events. It takes two values: `single` and `continuous`. By default, `click`, `touchstart`, and `touchend` have a QoS type of `single`; `touchmove` and `scroll` have a QoS type of `continuous`.
+* `onevent-vpi` indicates the imperceptible QoS target. It takes a non-negative integer value and forms a time value with a millisecond unit. For instance, `onclick-vpi: 50` indicates that the imperceptible target of `onclick` event is `50 ms`.
+* `onevent-vpu` indicates the usable QoS target with a similar semantics to `onevent-vpi`.
+* `onevent-vduration` is a short-cut to specify the QoS target of the `single` events. It takes two values: `short` and `long`. When `short` is specified, `100 ms` and `300 ms` are used as the imperceptible and usable QoS target, respectively. When `long` is specified, `1000 ms` and `10000 ms` are used as the two targets.
+  * `onevent-vduration` does not apply to `continuous` events. If used together with `onevent-type: continuous`, `onevent-vduration` will be ignored.
+  * When specified together with `onevent-vpi` (or `onevent-vpu`), `onevent-vduration` will be ignored and the QoS targets will be set by user specified values.
 
 ##Patch Chromium to Support GreenWeb##
 

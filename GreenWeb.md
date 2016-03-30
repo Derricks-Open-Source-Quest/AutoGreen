@@ -49,6 +49,17 @@ We set up a jsfiddle [page](https://jsfiddle.net/rn9twf8c/2/) to showcase how to
 
 ##Patch Chromium to Support GreenWeb##
 
+As a proof of concept we implement GreenWeb in Chromium. However GreenWeb is a generic Web language extension design that does not pose any specific constraints to browser implementations and can be supported in any browser.
+
+The Chromium patch is available [here](https://codereview.chromium.org/1835303002/#ps20001). We use the Chromium code review system so that one can clearly see what changes have been made to each file. To apply the patch to Chromium and build a GreenWeb-enabled Chromium:
+
+* Get Chromium source code for Android [here](https://www.chromium.org/developers/how-tos/android-build-instructions) and install all the dependencies, but do not build it just yet.
+* Download the raw patch (a `diff` file) of the latest patch set. There are multiple patch sets and will be even more as we continue developing GreenWeb. Make sure you download the patch of the latest set.
+* Checkout the commit `7b65998a89f974e7c7f5dfce4f4eae7fa69b421d` by `git checkout 7b65998a89f974e7c7f5dfce4f4eae7fa69b421d`. This is the commit on top of which we develop GreenWeb. We have not tested GreenWeb on the most recent build of Chromium yet.
+* Create a new branch from that commit by `git checkout -b greenweb`.
+* Apply the patch by `git apply PatchName.diff`
+
+
 ##Todo##
 
 * **JavaScript support** Maniputalate GreenWeb properties in JavaScript. Ideally we'd like to support something like:

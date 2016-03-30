@@ -2,7 +2,7 @@
 
 ##TL; DR##
 
-GreenWeb is a set of Web language extensions (defined as CSS rules) that guide the Web browser runtime to perform energy-efficiency optimizations. One needs to patch the browser to support it. As a proof of concept we have only Chromium support for now. The Chromium patch is at: https://codereview.chromium.org/1835303002/.
+GreenWeb is a set of Web language extensions (defined as CSS rules) that guide the Web browser runtime to perform energy-efficiency optimizations. One needs to patch the browser to support it. As a proof of concept we have only support for Chromium on Android. The Chromium patch is at: https://codereview.chromium.org/1835303002/.
 
 This readme file serves three purposes: explains what exactly is Greenweb; describes how to use GreenWeb in a Web application; provides instructions on how to patch Chromium to support GreenWeb.
 
@@ -60,8 +60,12 @@ The Chromium patch is available [here](https://codereview.chromium.org/183530300
 * Checkout the commit `7b65998a89f974e7c7f5dfce4f4eae7fa69b421d` by `git checkout 7b65998a89f974e7c7f5dfce4f4eae7fa69b421d`. This is the commit on top of which we develop GreenWeb. We have not tested GreenWeb on the most recent build of Chromium yet.
 * Create a new branch from that commit by `git checkout -b greenweb`.
 * Apply the patch by `git apply --index PatchName.diff`, which also stages all GreenWeb-related edits.
-* Build the patched Chromium. The instructions are still [here](https://www.chromium.org/developers/how-tos/android-build-instructions).
+* Build and install the patched Chromium. The instructions are still [here](https://www.chromium.org/developers/how-tos/android-build-instructions).
 
+A few important things to note:
+* GreenWeb optimization is by default disabled. To enable it, add the `--ebs-pi` or `--ebs-pu` flag to the command line configuration file. On most Android devices, it is located at `/data/local/tmp/chrome-shell-command-line`. More details are explained [here](https://www.chromium.org/developers/how-tos/run-chromium-with-flags). `--ebs-pi` instructs Chromium to optimize for the imperceptible QoS target, and `--ebs-pu` instructs Chromium to optimize for the usable target.
+* The Android device has to be rooted so that Chromium is able to change the processor frequency.
+* GreenWeb runtime uses an analytical prediction model to select the ideal ACMP configuration. The model is specifically constructed for the Samsung Exynos 5410 SoC which we originally used to develop GreenWeb. Using GreenWeb on a different hardware platform requires tweaking the model. For now, read `third_party/WebKit/Source/core/events/EventDispatcher.cpp` for more.
 
 ##Todo##
 

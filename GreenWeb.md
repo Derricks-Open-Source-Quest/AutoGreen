@@ -28,3 +28,16 @@ GreenWeb is designed as extensions to existing CSS language. Intuitively, each G
 
 
 ##Patch Chromium to Support GreenWeb##
+
+##Todo##
+
+* Add support for maniputalating GreenWeb properties in JavaScript. Ideally we'd like to support something like:
+```javascript
+if ($( this ).css("onclick-type") == 'single') {
+  $( this ).css("onclick-type", "continuous");
+} else {
+  $( this ).css("onclick-type", 'single');
+  $( this ).css("onclick-vpi", "10");
+  $( this ).css("onclick-vpu", "30");
+}
+```

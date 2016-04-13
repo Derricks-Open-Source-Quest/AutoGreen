@@ -69,17 +69,4 @@ A few important things to note:
 
 ##Todo##
 
-* **JavaScript support** Maniputalate GreenWeb properties in JavaScript. Ideally we'd like to support something like:
-```javascript
-if ($( this ).css("onclick-type") == 'single') {
-  $( this ).css("onclick-type", "continuous");
-} else {
-  $( this ).css("onclick-type", 'single');
-  $( this ).css("onclick-vpi", "10");
-  $( this ).css("onclick-vpu", "30");
-}
-```
-
-* **Better syntax** We must maintain the following order when the QoS properties are applied: Type --> Duration --> Pi/Pu. This is to make sure that the user specified values overwrite default ones. For that reason, the current implementation has to use the (ugly) names `vpi`, `vpu`, and `vduration` instead of the clean `pi`, `pu`, and `duration` because alphabetically `vpi` comes after `vduration`, which comes after `type`. The CSS style resolution engine of Chromium applies properties in alphabetical order. In the future, it would be ideal to adopt a multi-component CSS property using which we could specify everything in one line: `onevent-qos: type, [duration] | [pi, pu]`.
-
-* **User-agent intervention** It is possible that developers make wrong decisions. One example is that on a touch-enabled mobile device a browser would fire both `onclick` and `ontouchend` (see a nice explanation [here](http://tutorials.jenkov.com/responsive-mobile-friendly-web-design/touch-events-in-javascript.html)). A ill-constructed mobile Web application might lead to both callbacks being triggered and if the two events express conflicting QoS type it would be a problem. In addition, developers might even abuse the QoS target to trick the browser to always run as the highest performance. [*User-agent intervention*](https://docs.google.com/document/d/1E16tmoOveGopys9Fx4Nn8x8P9q7Jm6CJIqoJyz31tlg) is a notion that the user-agent, i.e., the Web browser, can come in and intervene behaviors that it deems developers should not do. We need to clearly specify the user-agent intervention behaviors for GreenWeb-related operations.
+Check the [issues](https://github.com/yuhao/AutoGreen/issues) that are labeled `greenweb`.

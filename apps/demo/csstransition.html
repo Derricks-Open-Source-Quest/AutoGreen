@@ -7,12 +7,15 @@
       background: red;
       transition: width 1s;
   }
+  button {
+    onclick-type: continuous;
+    onclick-vpi: 10;
+    onclick-vpu: 20;
+  }
 </style>
 <script>
   function foo() {
     document.getElementById('example').style.width="500px";
-  }
-  function bar() {
   }
 </script>
 </head>
@@ -22,6 +25,6 @@
 
   <div id="example"></div>
   <br>
-  <button onclick="foo()" onscroll="bar()">Animation</button>
+  <button onclick="foo()">Animation</button>
 </body>
 </html>

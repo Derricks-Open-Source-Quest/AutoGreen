@@ -1,4 +1,3 @@
-
 <html>
 <head>
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
@@ -46,13 +45,16 @@
     position: fixed;
     top: 5em;
   }
+  body {
+    onscroll-type: continuous;
+  }
   </style>
 </head>
 <body onscroll="foo()">
   <p>Scroll on the page to see the expansion animation.</p>
 
   <div id="example"></div>
-<p>Scrolled <span id="demo">0</span> px.</p>
+  <p>Scrolled <span id="demo">0</span> px.</p>
 </body>
 </html>
 

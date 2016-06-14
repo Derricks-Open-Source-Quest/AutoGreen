@@ -13,26 +13,29 @@
   p:hover {
     background: yellow;
   }
+  p#x {
+    onclick-type: continuous;
+    onclick-vpi: 200;
+    onclick-vpu: 500;
+  }
+  p#y {
+    onclick-type: continuous;
+  }
   </style>
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 <body>
  
-<p>First Paragraph</p>
-<p>Second Paragraph</p>
-<p>Yet one more Paragraph</p>
-<a href="https://www.google.com/"><div onclick="foo()">Google</div></a>
- 
-<script>
-$( "p" ).on('touchend', function(e) {
-  $( this ).slideUp();
-});
-
-function foo() {
-  console.log("clicked");
-}
-
-</script>
-  </body>
+  <p id="x">First Paragraph</p>
+  <p id="y">Second Paragraph</p>
+  <p id="z">Yet one more Paragraph</p>
+   
+  <script>
+  $( "p" ).on('touchend', function(e) {
+    $( this ).slideUp();
+  });
+  
+  </script>
+</body>
 </html>
 

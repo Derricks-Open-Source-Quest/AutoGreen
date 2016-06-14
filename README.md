@@ -1,6 +1,6 @@
 # AutoGreen
 
-AutoGreen is a system that automatically annotates (mobile) Web applications to enable energy-efficiency optimizations by the Web runtime. The annotations are called GreenWeb, which are Web language extensions that allow Web developers to express user QoS expectations at an abstract level. Based on programmer-guided QoS information the Web runtime dynamically determines how to deliver the target QoS experience while minimizing the energy consumption.
+AutoGreen is a system that automatically annotates (mobile) Web applications to enable energy-efficiency optimizations by the Web runtime. The annotations are called [GreenWeb](GreenWeb.md), which are Web language extensions that allow Web developers to express user QoS expectations at an abstract level. Based on programmer-guided QoS information the Web runtime dynamically determines how to deliver the target QoS experience while minimizing the energy consumption.
 
 This is a project from the [Electrical and Computer Engineering Department](http://www.ece.utexas.edu/) at [The University of Texas at Austin](http://www.utexas.edu/). See the contributors and acknowledgement at the end for more information.
 
@@ -36,21 +36,13 @@ The high-level structure of this repo is as follows:
 
 ## How AutoGreen Works
 
-#### A Brief Introduction of GreenWeb Language Extensions
+#### GreenWeb Language Extensions
 
-AutoGreen is a system that automatically annotates Web applications with GreenWeb language extensions. Here we provide a brief overview of GreenWeb. More details can be found in this paper.
-
-GreenWeb let developers specify two critical aspects of end-user QoS experience in mobile Web applications: QoS type and QoS target. Intuitively, QoS type characterizes whether users perceive QoS experience by interaction responsiveness or animation smoothness, and QoS target denotes the performance level that is required to deliver a desirable user experience for a specific QoS type.
-
-Two QoS types exist: single and continuous:
-* Some user interactions produce only a single frame, which we call the response frame. The QoS type of these interactions is “single,” indicating that user QoS experience is determined by the latency at which the response frame is perceived by users .
-* The other QoS type is “continuous,” corresponding to interactions whose responses are not one single frame but a sequence of continuous frames. User QoS experience is determined by the latency of each frame in the sequence rather than one specific frame as in the “single” case.
-
-GreenWeb is designed as extensions to existing CSS language. Intuitively, each GreenWeb rule selects a DOM element `E`, and declares CSS properties to express the QoS type and QoS target information when an event `onevent` is triggered on `E`. For example: `E:QoS{ onevent-qos: continuous }` means as soon as `onevent` is triggered on DOM element `E`, the application must continuously optimize for frame latency.
+AutoGreen is a system that automatically annotates Web applications with GreenWeb language extensions. The GreenWeb [readme](GreenWeb.md) provides a brief introduction to the syntax and sementics of the GreenWeb language extensions. It also describes instructions on how to patch the Chromium browser to support the Greenweb language extensions. Understanding AutoGreen requires some basic knowledge of GreenWeb so we encourage you to take a look at GreenWeb first.
 
 #### How AutoGreen Applies GreenWeb Annotations
 
-AutoGreen mainly consists of two phases. The first phase is to detect the JavaScript events associated with all DOM nodes in a Web application. The second phase is to detect the QoS information of each event.
+AutoGreen mainly consists of two phases. The first phase is to detect the JavaScript events associated with all DOM nodes in a Web application. The second phase is to detect, and annotate, the QoS information of each event.
 
 For the event detection phase, AutoGreen owes a great debt of gratitude to <a href="https://github.com/DataTables/VisualEvent">Visual Event</a>, which automatically identifies the details of all JavaScript events associated with all DOM elements on a Web application (webpage). In fact, AutoGreen started as a fork of Visual Event. Take a look at Visual Event's [readme](VisualEvents.README.md) for more details of the event detection phase.
 
